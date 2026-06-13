@@ -338,6 +338,67 @@ table { border-collapse: collapse; width: 100%; }
 .news-tag.important { background: #c0392b; }
 .news-text { flex: 1; font-size: 0.95rem; }
 
+/* ===== Mascot Section ===== */
+.mascot-section { background: var(--color-bg); }
+.mascot-intro {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.mascot-image {
+  flex-shrink: 0;
+}
+.mascot-image img {
+  width: 180px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(45,80,22,0.12));
+  animation: mascot-float 3s ease-in-out infinite;
+}
+@keyframes mascot-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.mascot-bubble {
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  position: relative;
+  box-shadow: var(--shadow-card);
+}
+.mascot-bubble::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 40px;
+  border: 10px solid transparent;
+  border-right-color: var(--color-white);
+}
+.mascot-name {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 1rem;
+}
+.mascot-name span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--color-text);
+}
+.mascot-text p {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  margin-bottom: 0.6rem;
+}
+.mascot-motto {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 1.05rem !important;
+  margin-top: 0.5rem;
+  margin-bottom: 0 !important;
+}
+
 /* ===== CTA Banner ===== */
 .cta-banner {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
@@ -367,6 +428,13 @@ table { border-collapse: collapse; width: 100%; }
   margin-bottom: 1.5rem;
 }
 .cta-banner .btn-white { font-size: 1.05rem; padding: 0.9rem 2.5rem; }
+.cta-mascot {
+  width: 80px;
+  height: auto;
+  margin: 0 auto 0.8rem;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+}
 
 /* ===== Service Page ===== */
 .page-header {
@@ -762,6 +830,15 @@ table { border-collapse: collapse; width: 100%; }
   .header-info { display: none; }
   .header-cta { display: none; }
   .nav-toggle { display: block; }
+
+  .mascot-intro {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .mascot-image img { width: 140px; }
+  .mascot-bubble::before { display: none; }
+  .mascot-bubble { padding: 1.5rem; }
 
   .nav {
     position: fixed;

@@ -1,0 +1,92 @@
+<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+<!-- ろうむねこ - 本部長社労士事務所マスコット -->
+
+<!-- 尻尾 -->
+<path d="M155 175 Q175 160 170 140 Q167 130 160 135 Q155 145 150 155 Q148 162 150 170Z" fill="#e8e0d8"/>
+<path d="M153 173 Q170 160 167 143 Q165 135 160 139 Q155 148 152 157 Q150 163 152 170Z" fill="#f5f0eb"/>
+
+<!-- 体 -->
+<ellipse cx="100" cy="170" rx="55" ry="48" fill="#e8e0d8"/>
+<ellipse cx="100" cy="170" rx="51" ry="44" fill="#f5f0eb"/>
+<ellipse cx="100" cy="165" rx="38" ry="34" fill="#faf8f5"/>
+
+<!-- ベスト -->
+<path d="M65 155 L65 195 Q65 205 80 205 L120 205 Q135 205 135 195 L135 155" fill="#2d5016"/>
+<path d="M69 157 L69 193 Q69 201 82 201 L118 201 Q131 201 131 193 L131 157" fill="#3a6a20"/>
+<line x1="100" y1="160" x2="100" y2="200" stroke="#4a7a2e" stroke-width="1.2"/>
+<rect x="96" y="160" width="8" height="8" rx="1" fill="#f0d060" stroke="#c8a830" stroke-width="0.4"/>
+
+<!-- 左耳 -->
+<path d="M60 95 L45 50 Q43 45 50 48 L75 75Z" fill="#e8e0d8"/>
+<path d="M62 93 L48 55 Q47 51 52 53 L73 76Z" fill="#f5f0eb"/>
+<path d="M55 65 L50 52 Q49 50 53 55 L60 70Z" fill="#ffc0cb" opacity="0.5"/>
+<!-- 左耳の葉っぱ飾り -->
+<path d="M43 52 Q38 42 40 33 Q42 28 46 32 Q49 38 48 48Z" fill="#4a7a2e"/>
+<path d="M44 50 Q40 43 41 36 Q43 32 46 35 Q48 40 47 47Z" fill="#5a9a3e"/>
+
+<!-- 右耳 -->
+<path d="M140 95 L155 50 Q157 45 150 48 L125 75Z" fill="#e8e0d8"/>
+<path d="M138 93 L152 55 Q153 51 148 53 L127 76Z" fill="#f5f0eb"/>
+<path d="M145 65 L150 52 Q151 50 147 55 L140 70Z" fill="#ffc0cb" opacity="0.5"/>
+
+<!-- 頭 -->
+<ellipse cx="100" cy="100" rx="55" ry="50" fill="#e8e0d8"/>
+<ellipse cx="100" cy="100" rx="51" ry="46" fill="#f5f0eb"/>
+<ellipse cx="90" cy="95" rx="20" ry="25" fill="#faf8f5" opacity="0.5"/>
+
+<!-- 目 -->
+<circle cx="82" cy="95" r="10" fill="white" stroke="#b0a080" stroke-width="0.8"/>
+<circle cx="118" cy="95" r="10" fill="white" stroke="#b0a080" stroke-width="0.8"/>
+<circle cx="84" cy="94" r="5.5" fill="#2d5016"/>
+<circle cx="120" cy="94" r="5.5" fill="#2d5016"/>
+<circle cx="86" cy="91" r="2.2" fill="white"/>
+<circle cx="122" cy="91" r="2.2" fill="white"/>
+
+<!-- 眉毛 -->
+<path d="M72 82 Q77 78 82 82" stroke="#c0b0a0" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M114 82 Q119 78 124 82" stroke="#c0b0a0" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+<!-- 鼻 -->
+<ellipse cx="100" cy="105" rx="5" ry="3.5" fill="#ffa0b0"/>
+<path d="M100 108.5 L100 113" stroke="#c0b0a0" stroke-width="0.8" stroke-linecap="round"/>
+
+<!-- ほっぺ -->
+<ellipse cx="72" cy="108" rx="5" ry="3" fill="#ffc0cb" opacity="0.3"/>
+<ellipse cx="128" cy="108" rx="5" ry="3" fill="#ffc0cb" opacity="0.3"/>
+
+<!-- 口 -->
+<path d="M94 114 Q100 120 106 114" stroke="#c0a090" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+<!-- ひげ -->
+<g stroke="#c0b0a0" stroke-width="0.8" stroke-linecap="round">
+<line x1="40" y1="97" x2="68" y2="102"/>
+<line x1="42" y1="105" x2="69" y2="107"/>
+<line x1="44" y1="113" x2="69" y2="111"/>
+<line x1="160" y1="97" x2="132" y2="102"/>
+<line x1="158" y1="105" x2="131" y2="107"/>
+<line x1="156" y1="113" x2="131" y2="111"/>
+</g>
+
+<!-- リボン -->
+<path d="M85 130 Q100 143 115 130" fill="#2d5016"/>
+<path d="M88 131 Q100 141 112 131" fill="#4a7a2e"/>
+<path d="M95 131 Q100 136 105 131" fill="#5a9a3e" opacity="0.5"/>
+<path d="M100 138 L93 148 Q91 151 95 151 L105 151 Q109 151 107 148 Z" fill="#2d5016"/>
+<path d="M100 140 L95 147 Q94 149 96 149 L104 149 Q106 149 105 147 Z" fill="#4a7a2e"/>
+
+<!-- 手 -->
+<ellipse cx="55" cy="175" rx="12" ry="14" fill="#e8e0d8"/>
+<ellipse cx="55" cy="175" rx="10" ry="12" fill="#f5f0eb"/>
+<ellipse cx="55" cy="179" rx="6" ry="4.5" fill="#ffc0cb" opacity="0.2"/>
+<ellipse cx="145" cy="175" rx="12" ry="14" fill="#e8e0d8"/>
+<ellipse cx="145" cy="175" rx="10" ry="12" fill="#f5f0eb"/>
+<ellipse cx="145" cy="179" rx="6" ry="4.5" fill="#ffc0cb" opacity="0.2"/>
+
+<!-- 足 -->
+<ellipse cx="82" cy="215" rx="14" ry="9" fill="#e8e0d8"/>
+<ellipse cx="82" cy="215" rx="12" ry="7" fill="#f5f0eb"/>
+<ellipse cx="82" cy="217" rx="7" ry="4" fill="#ffc0cb" opacity="0.2"/>
+<ellipse cx="118" cy="215" rx="14" ry="9" fill="#e8e0d8"/>
+<ellipse cx="118" cy="215" rx="12" ry="7" fill="#f5f0eb"/>
+<ellipse cx="118" cy="217" rx="7" ry="4" fill="#ffc0cb" opacity="0.2"/>
+</svg>
