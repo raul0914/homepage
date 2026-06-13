@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サイト設定 | 管理画面</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .settings-wrap { max-width: 900px; margin: 0 auto; padding: 2rem clamp(1rem, 4vw, 2rem); }
+    .settings-header { text-align: center; margin-bottom: 2rem; }
+    .settings-header h1 { font-family: var(--font-heading); font-size: 1.8rem; color: var(--color-primary-dark); }
+    .settings-header p { color: var(--color-text-light); font-size: 0.9rem; margin-top: 0.5rem; }
+
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--color-border); margin-bottom: 2rem; }
+    .tab-btn {
+      padding: 0.8rem 1.5rem; background: none; border: none; cursor: pointer;
+      font-size: 0.95rem; font-weight: 500; color: var(--color-text-light);
+      border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all var(--transition);
+      font-family: var(--font-base);
+    }
+    .tab-btn.active { color: var(--color-primary-dark); border-bottom-color: var(--color-primary); }
+    .tab-btn:hover { color: var(--color-primary); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .field-group { margin-bottom: 1.8rem; }
+    .field-group label { display: block; font-weight: 500; margin-bottom: 0.4rem; font-size: 0.95rem; color: var(--color-primary-dark); }
+    .field-group .hint { font-size: 0.8rem; color: var(--color-text-light); margin-bottom: 0.4rem; }
+    .field-group input, .field-group textarea {
+      width: 100%; padding: 0.7rem 1rem; border: 1px solid var(--color-border); border-radius: 8px;
+      font-family: var(--font-base); font-size: 0.95rem; transition: border-color var(--transition);
+    }
+    .field-group input:focus, .field-group textarea:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-pale); }
+    .field-group textarea { min-height: 80px; resize: vertical; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    .section-label {
+      font-family: var(--font-heading); font-size: 1.1rem; color: var(--color-primary-dark);
+      padding-bottom: 0.5rem; border-bottom: 2px solid var(--color-primary-pale); margin: 2rem 0 1.5rem;
+    }
+
+    .pricing-editor { margin-bottom: 2rem; }
+    .pricing-editor h3 { font-family: var(--font-heading); font-size: 1.05rem; color: var(--color-primary-dark); margin-bottom: 1rem; }
+    .pricing-row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+    .pricing-row input { flex: 1; padding: 0.5rem 0.7rem; border: 1px solid var(--color-border); border-radius: 6px; font-family: var(--font-base); font-size: 0.9rem; }
+    .pricing-row input:focus { outline: none; border-color: var(--color-primary); }
+    .pricing-row-header { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .pricing-row-header span { flex: 1; font-size: 0.8rem; font-weight: 500; color: var(--color-text-light); }
+    .btn-add-row, .btn-remove-row {
+      padding: 0.3rem 0.6rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+      transition: all var(--transition); flex-shrink: 0;
+    }
+    .btn-add-row { background: var(--color-primary-pale); color: var(--color-primary-dark); margin-top: 0.5rem; }
+    .btn-add-row:hover { background: var(--color-primary); color: white; }
+    .btn-remove-row { background: #f8d7da; color: #721c24; width: 32px; height: 32px; }
+    .btn-remove-row:hover { background: #f5c6cb; }
+
+    .action-bar {
+      position: sticky; bottom: 0; background: white; padding: 1rem 0; border-top: 1px solid var(--color-border);
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; z-index: 10;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    }
+    .action-bar .btn { font-size: 0.9rem; padding: 0.7rem 1.8rem; }
+    .btn-reset { background: #f8d7da; color: #721c24; }
+    .btn-reset:hover { background: #f5c6cb; transform: translateY(-2px); }
+    .btn-download { background: var(--color-primary-light); color: white; }
+    .btn-download:hover { background: var(--color-primary); color: white; transform: translateY(-2px); }
+
+    .toast {
+      position: fixed; top: 100px; left: 50%; transform: translateX(-50%) translateY(-20px);
+      background: var(--color-primary); color: white; padding: 0.8rem 2rem; border-radius: 8px;
+      font-size: 0.9rem; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 9999;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 768px) {
+      .field-row { grid-template-columns: 1fr; }
+      .pricing-row { flex-wrap: wrap; }
+      .pricing-row input { min-width: 0; }
+      .tabs { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body style="padding-top: 0;">
+
+  <div class="settings-wrap">
+    <div class="settings-header">
+      <h1>サイト設定</h1>
+      <p>事務所の情報や料金を変更すると、すべてのページに自動で反映されます。</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="basic">基本情報</button>
+      <button class="tab-btn" data-tab="pricing">料金表</button>
+    </div>
+
+    <!-- ===== 基本情報タブ ===== -->
+    <div id="tab-basic" class="tab-panel active">
+
+      <h2 class="section-label">事務所情報</h2>
+      <div class="field-group">
+        <label for="s-officeName">事務所名</label>
+        <input type="text" id="s-officeName" data-key="officeName">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="s-phone">電話番号</label>
+          <input type="text" id="s-phone" data-key="phone">
+        </div>
+        <div class="field-group">
+          <label for="s-fax">FAX番号</label>
+          <input type="text" id="s-fax" data-key="fax">
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="s-email">メールアドレス</label>
+        <input type="email" id="s-email" data-key="email">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="s-postalCode">郵便番号</label>
+          <input type="text" id="s-postalCode" data-key="postalCode" placeholder="〒000-0000">
+        </div>
+        <div class="field-group">
+          <label for="s-address">住所</label>
+          <input type="text" id="s-address" data-key="address">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="s-businessHours">営業時間</label>
+          <input type="text" id="s-businessHours" data-key="businessHours" placeholder="平日 9:00〜18:00">
+        </div>
+        <div class="field-group">
+          <label for="s-closedDays">定休日</label>
+          <input type="text" id="s-closedDays" data-key="closedDays" placeholder="土日祝休み">
+        </div>
+      </div>
+
+      <h2 class="section-label">代表者情報</h2>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="s-representative">代表者名</label>
+          <input type="text" id="s-representative" data-key="representative">
+        </div>
+        <div class="field-group">
+          <label for="s-representativeKana">フリガナ</label>
+          <input type="text" id="s-representativeKana" data-key="representativeKana">
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="s-representativeTitle">肩書き</label>
+        <input type="text" id="s-representativeTitle" data-key="representativeTitle" placeholder="特定社会保険労務士">
+      </div>
+      <div class="field-group">
+        <label for="s-qualifications">保有資格</label>
+        <input type="text" id="s-qualifications" data-key="qualifications">
+        <p class="hint">「/」区切りで入力してください</p>
+      </div>
+      <div class="field-group">
+        <label for="s-profileBio1">プロフィール文（前半）</label>
+        <textarea id="s-profileBio1" data-key="profileBio1" rows="3"></textarea>
+      </div>
+      <div class="field-group">
+        <label for="s-profileBio2">プロフィール文（後半）</label>
+        <textarea id="s-profileBio2" data-key="profileBio2" rows="3"></textarea>
+      </div>
+
+      <h2 class="section-label">登録・所属情報</h2>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="s-registrationNumber">登録番号</label>
+          <input type="text" id="s-registrationNumber" data-key="registrationNumber">
+        </div>
+        <div class="field-group">
+          <label for="s-association">所属会</label>
+          <input type="text" id="s-association" data-key="association">
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="s-serviceArea">対応エリア</label>
+        <input type="text" id="s-serviceArea" data-key="serviceArea">
+      </div>
+
+      <h2 class="section-label">その他の設定</h2>
+      <div class="field-group">
+        <label for="s-mapEmbedUrl">Googleマップ埋め込みURL</label>
+        <input type="text" id="s-mapEmbedUrl" data-key="mapEmbedUrl">
+        <p class="hint">Googleマップで「共有」→「地図を埋め込む」からURLをコピーしてください</p>
+      </div>
+      <div class="field-group">
+        <label for="s-accessInfo">アクセス情報</label>
+        <textarea id="s-accessInfo" data-key="accessInfo" rows="3" placeholder="改行ごとに1行ずつ表示されます"></textarea>
+      </div>
+      <div class="field-group">
+        <label for="s-formActionUrl">お問い合わせフォーム送信先URL</label>
+        <input type="text" id="s-formActionUrl" data-key="formActionUrl">
+        <p class="hint">Formspree等のURL（例: https://formspree.io/f/xxxxx）</p>
+      </div>
+    </div>
+
+    <!-- ===== 料金表タブ ===== -->
+    <div id="tab-pricing" class="tab-panel">
+
+      <div class="pricing-editor" id="retainer-editor">
+        <h3>顧問契約</h3>
+        <div class="pricing-row-header">
+          <span>従業員数</span><span>月額顧問料（税別）</span><span>主なサービス内容</span><span style="width:32px;"></span>
+        </div>
+        <div id="retainer-rows"></div>
+        <button class="btn-add-row" onclick="addRetainerRow()">＋ 行を追加</button>
+      </div>
+
+      <div class="pricing-editor" id="spot-editor">
+        <h3>スポット業務</h3>
+        <div class="pricing-row-header">
+          <span>業務内容</span><span>料金（税別）</span><span>備考</span><span style="width:32px;"></span>
+        </div>
+        <div id="spot-rows"></div>
+        <button class="btn-add-row" onclick="addSpotRow()">＋ 行を追加</button>
+      </div>
+
+      <div class="pricing-editor" id="payroll-editor">
+        <h3>給与計算代行</h3>
+        <div class="pricing-row-header">
+          <span>従業員数</span><span>基本料金（税別/月）</span><span>1人あたり追加</span><span style="width:32px;"></span>
+        </div>
+        <div id="payroll-rows"></div>
+        <button class="btn-add-row" onclick="addPayrollRow()">＋ 行を追加</button>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="btn btn-primary" onclick="saveSettings()">保存する</button>
+      <button class="btn btn-download" onclick="downloadConfig()">config.js をダウンロード</button>
+      <button class="btn btn-reset" onclick="resetSettings()">初期値に戻す</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/config.js"></script>
+  <script>
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+
+    // Load current config into form
+    function loadFormValues() {
+      var c = OFFICE_CONFIG;
+      document.querySelectorAll('[data-key]').forEach(function(el) {
+        var key = el.getAttribute('data-key');
+        if (c.hasOwnProperty(key) && typeof c[key] === 'string') {
+          el.value = c[key];
+        }
+      });
+      renderRetainerRows(c.retainerPricing);
+      renderSpotRows(c.spotPricing);
+      renderPayrollRows(c.payrollPricing);
+    }
+
+    // Pricing row renderers
+    function renderRetainerRows(data) {
+      var container = document.getElementById('retainer-rows');
+      container.innerHTML = '';
+      data.forEach(function(row, i) {
+        container.innerHTML += '<div class="pricing-row">' +
+          '<input value="' + esc(row.range) + '" data-pricing="retainer" data-field="range" data-idx="' + i + '">' +
+          '<input value="' + esc(row.price) + '" data-pricing="retainer" data-field="price" data-idx="' + i + '">' +
+          '<input value="' + esc(row.services) + '" data-pricing="retainer" data-field="services" data-idx="' + i + '">' +
+          '<button class="btn-remove-row" onclick="removeRow(\'retainer\',' + i + ')">✕</button></div>';
+      });
+    }
+    function renderSpotRows(data) {
+      var container = document.getElementById('spot-rows');
+      container.innerHTML = '';
+      data.forEach(function(row, i) {
+        container.innerHTML += '<div class="pricing-row">' +
+          '<input value="' + esc(row.service) + '" data-pricing="spot" data-field="service" data-idx="' + i + '">' +
+          '<input value="' + esc(row.price) + '" data-pricing="spot" data-field="price" data-idx="' + i + '">' +
+          '<input value="' + esc(row.note || '') + '" data-pricing="spot" data-field="note" data-idx="' + i + '">' +
+          '<button class="btn-remove-row" onclick="removeRow(\'spot\',' + i + ')">✕</button></div>';
+      });
+    }
+    function renderPayrollRows(data) {
+      var container = document.getElementById('payroll-rows');
+      container.innerHTML = '';
+      data.forEach(function(row, i) {
+        container.innerHTML += '<div class="pricing-row">' +
+          '<input value="' + esc(row.range) + '" data-pricing="payroll" data-field="range" data-idx="' + i + '">' +
+          '<input value="' + esc(row.base) + '" data-pricing="payroll" data-field="base" data-idx="' + i + '">' +
+          '<input value="' + esc(row.perPerson) + '" data-pricing="payroll" data-field="perPerson" data-idx="' + i + '">' +
+          '<button class="btn-remove-row" onclick="removeRow(\'payroll\',' + i + ')">✕</button></div>';
+      });
+    }
+
+    function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function addRetainerRow() {
+      var data = collectPricingData('retainer', ['range', 'price', 'services']);
+      data.push({ range: '', price: '', services: '' });
+      renderRetainerRows(data);
+    }
+    function addSpotRow() {
+      var data = collectPricingData('spot', ['service', 'price', 'note']);
+      data.push({ service: '', price: '', note: '' });
+      renderSpotRows(data);
+    }
+    function addPayrollRow() {
+      var data = collectPricingData('payroll', ['range', 'base', 'perPerson']);
+      data.push({ range: '', base: '', perPerson: '' });
+      renderPayrollRows(data);
+    }
+
+    function removeRow(type, idx) {
+      var fields = type === 'retainer' ? ['range', 'price', 'services'] :
+                   type === 'spot' ? ['service', 'price', 'note'] :
+                   ['range', 'base', 'perPerson'];
+      var data = collectPricingData(type, fields);
+      data.splice(idx, 1);
+      if (type === 'retainer') renderRetainerRows(data);
+      else if (type === 'spot') renderSpotRows(data);
+      else renderPayrollRows(data);
+    }
+
+    function collectPricingData(type, fields) {
+      var inputs = document.querySelectorAll('[data-pricing="' + type + '"]');
+      var map = {};
+      inputs.forEach(function(inp) {
+        var idx = parseInt(inp.getAttribute('data-idx'));
+        var field = inp.getAttribute('data-field');
+        if (!map[idx]) map[idx] = {};
+        map[idx][field] = inp.value;
+      });
+      var arr = [];
+      Object.keys(map).sort(function(a,b){return a-b;}).forEach(function(k) { arr.push(map[k]); });
+      return arr;
+    }
+
+    // Save
+    function saveSettings() {
+      var config = {};
+      document.querySelectorAll('[data-key]').forEach(function(el) {
+        config[el.getAttribute('data-key')] = el.value;
+      });
+      config.retainerPricing = collectPricingData('retainer', ['range', 'price', 'services']);
+      config.spotPricing = collectPricingData('spot', ['service', 'price', 'note']);
+      config.payrollPricing = collectPricingData('payroll', ['range', 'base', 'perPerson']);
+
+      localStorage.setItem('officeConfig', JSON.stringify(config));
+      OFFICE_CONFIG = config;
+      showToast('設定を保存しました');
+    }
+
+    // Reset
+    function resetSettings() {
+      if (!confirm('設定を初期値に戻しますか？')) return;
+      localStorage.removeItem('officeConfig');
+      OFFICE_CONFIG = OFFICE_CONFIG_DEFAULTS;
+      loadFormValues();
+      showToast('初期値に戻しました');
+    }
+
+    // Download config.js
+    function downloadConfig() {
+      var config = {};
+      document.querySelectorAll('[data-key]').forEach(function(el) {
+        config[el.getAttribute('data-key')] = el.value;
+      });
+      config.retainerPricing = collectPricingData('retainer', ['range', 'price', 'services']);
+      config.spotPricing = collectPricingData('spot', ['service', 'price', 'note']);
+      config.payrollPricing = collectPricingData('payroll', ['range', 'base', 'perPerson']);
+
+      var lines = ['var OFFICE_CONFIG_DEFAULTS = '];
+      lines.push(JSON.stringify(config, null, 2) + ';\n');
+      lines.push('');
+      lines.push('function getConfig() {');
+      lines.push('  try {');
+      lines.push('    var saved = localStorage.getItem("officeConfig");');
+      lines.push('    if (saved) {');
+      lines.push('      var parsed = JSON.parse(saved);');
+      lines.push('      var merged = {};');
+      lines.push('      for (var key in OFFICE_CONFIG_DEFAULTS) {');
+      lines.push('        merged[key] = parsed.hasOwnProperty(key) ? parsed[key] : OFFICE_CONFIG_DEFAULTS[key];');
+      lines.push('      }');
+      lines.push('      return merged;');
+      lines.push('    }');
+      lines.push('  } catch (e) {}');
+      lines.push('  return OFFICE_CONFIG_DEFAULTS;');
+      lines.push('}');
+      lines.push('');
+      lines.push('var OFFICE_CONFIG = getConfig();');
+
+      // Read the applyConfig function from the existing file
+      var funcText = applyConfig.toString();
+      var applyPricingText = applyPricingTable.toString();
+      lines.push('');
+      lines.push(funcText);
+      lines.push('');
+      lines.push(applyPricingText);
+      lines.push('');
+      lines.push('document.addEventListener("DOMContentLoaded", applyConfig);');
+
+      var blob = new Blob([lines.join('\n')], { type: 'application/javascript' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'config.js';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('config.js をダウンロードしました');
+    }
+
+    // Toast
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2500);
+    }
+
+    loadFormValues();
+  </script>
+</body>
+</html>
