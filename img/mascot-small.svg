@@ -1,77 +1,100 @@
-<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
-<!-- ろうむねこ 小 - 手を振るポーズ -->
+<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+<!-- ろうむねこ（女の子）小 - 手を振るポーズ -->
 
 <!-- 体 -->
-<ellipse cx="60" cy="102" rx="32" ry="28" fill="#e8e0d8"/>
-<ellipse cx="60" cy="102" rx="29" ry="25" fill="#f5f0eb"/>
-<ellipse cx="60" cy="99" rx="22" ry="20" fill="#faf8f5"/>
+<ellipse cx="60" cy="105" rx="30" ry="26" fill="#f0e8e0"/>
+<ellipse cx="60" cy="105" rx="27" ry="23" fill="#f8f2ec"/>
 
-<!-- ベスト -->
-<path d="M38 93 L38 118 Q38 125 48 125 L72 125 Q82 125 82 118 L82 93" fill="#2d5016"/>
-<path d="M41 95 L41 116 Q41 122 50 122 L70 122 Q79 122 79 116 L79 95" fill="#3a6a20"/>
-<line x1="60" y1="97" x2="60" y2="121" stroke="#4a7a2e" stroke-width="0.8"/>
-<rect x="57" y="97" width="6" height="6" rx="1" fill="#f0d060" stroke="#c8a830" stroke-width="0.3"/>
+<!-- ワンピースエプロン -->
+<path d="M37 95 L37 123 Q37 132 48 133 L72 133 Q83 132 83 123 L83 95" fill="#2d5016"/>
+<path d="M40 97 L40 121 Q40 129 50 130 L70 130 Q80 129 80 121 L80 97" fill="#3a6a20"/>
+<!-- フリル -->
+<path d="M40 97 Q45 101 50 97 Q55 101 60 97 Q65 101 70 97 Q75 101 80 97" fill="none" stroke="#4a8a2e" stroke-width="0.8"/>
+<!-- リボンベルト -->
+<rect x="37" y="108" width="46" height="3" rx="1.5" fill="#ff8fa0"/>
+<path d="M60 107 L56 113 Q55 114 57 114 L63 114 Q65 114 64 113Z" fill="#ff8fa0"/>
+<circle cx="60" cy="108.5" r="1.5" fill="#f0d060"/>
 
 <!-- 左耳 -->
-<path d="M38 55 L28 28 Q27 25 32 27 L47 44Z" fill="#e8e0d8"/>
-<path d="M39 54 L30 30 Q29 28 33 30 L46 45Z" fill="#f5f0eb"/>
-<path d="M34 38 L31 29 Q30 28 33 31 L37 40Z" fill="#ffc0cb" opacity="0.5"/>
-<!-- 葉っぱ飾り -->
-<path d="M27 28 Q24 21 25 15 Q27 12 29 15 Q31 19 30 26Z" fill="#4a7a2e"/>
-<path d="M28 27 Q25 22 26 17 Q27 14 29 17 Q30 20 29 25Z" fill="#5a9a3e"/>
-
-<!-- 右耳 -->
-<path d="M82 55 L92 28 Q93 25 88 27 L73 44Z" fill="#e8e0d8"/>
-<path d="M81 54 L90 30 Q91 28 87 30 L74 45Z" fill="#f5f0eb"/>
-<path d="M86 38 L89 29 Q90 28 87 31 L83 40Z" fill="#ffc0cb" opacity="0.5"/>
-
-<!-- 頭 -->
-<ellipse cx="60" cy="58" rx="33" ry="30" fill="#e8e0d8"/>
-<ellipse cx="60" cy="58" rx="30" ry="27" fill="#f5f0eb"/>
-
-<!-- 目 -->
-<circle cx="49" cy="55" r="6" fill="white" stroke="#b0a080" stroke-width="0.5"/>
-<circle cx="71" cy="55" r="6" fill="white" stroke="#b0a080" stroke-width="0.5"/>
-<circle cx="50" cy="54" r="3.2" fill="#2d5016"/>
-<circle cx="72" cy="54" r="3.2" fill="#2d5016"/>
-<circle cx="51.5" cy="52.5" r="1.3" fill="white"/>
-<circle cx="73.5" cy="52.5" r="1.3" fill="white"/>
-
-<!-- 鼻 -->
-<ellipse cx="60" cy="62" rx="3" ry="2" fill="#ffa0b0"/>
-
-<!-- ほっぺ -->
-<ellipse cx="42" cy="64" rx="3.5" ry="2" fill="#ffc0cb" opacity="0.3"/>
-<ellipse cx="78" cy="64" rx="3.5" ry="2" fill="#ffc0cb" opacity="0.3"/>
-
-<!-- 口 -->
-<path d="M56 67 Q60 72 64 67" stroke="#c0a090" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-
-<!-- ひげ -->
-<g stroke="#c0b0a0" stroke-width="0.5" stroke-linecap="round">
-<line x1="24" y1="57" x2="42" y2="60"/>
-<line x1="26" y1="63" x2="43" y2="63"/>
-<line x1="96" y1="57" x2="78" y2="60"/>
-<line x1="94" y1="63" x2="77" y2="63"/>
+<path d="M36 52 L26 26 Q25 23 30 25 L44 40Z" fill="#f0e8e0"/>
+<path d="M37 51 L28 29 Q27 27 31 28 L43 41Z" fill="#f8f2ec"/>
+<path d="M32 36 L29 27 Q28 26 31 29 L35 39Z" fill="#ffc0cb" opacity="0.5"/>
+<!-- 花飾り -->
+<g transform="translate(25,24)">
+  <circle cx="0" cy="0" r="4" fill="#ff8fa0"/>
+  <circle cx="0" cy="-3.2" r="2" fill="#ffaab8"/>
+  <circle cx="3" cy="-1" r="2" fill="#ffaab8"/>
+  <circle cx="2" cy="2.5" r="2" fill="#ffaab8"/>
+  <circle cx="-2" cy="2.5" r="2" fill="#ffaab8"/>
+  <circle cx="-3" cy="-1" r="2" fill="#ffaab8"/>
+  <circle cx="0" cy="0" r="2" fill="#f0d060"/>
 </g>
 
-<!-- リボン -->
-<path d="M51 77 Q60 85 69 77" fill="#2d5016"/>
-<path d="M53 78 Q60 83 67 78" fill="#4a7a2e"/>
+<!-- 右耳 -->
+<path d="M84 52 L94 26 Q95 23 90 25 L76 40Z" fill="#f0e8e0"/>
+<path d="M83 51 L92 29 Q93 27 89 28 L77 41Z" fill="#f8f2ec"/>
+<path d="M88 36 L91 27 Q92 26 89 29 L85 39Z" fill="#ffc0cb" opacity="0.5"/>
+
+<!-- 頭 -->
+<ellipse cx="60" cy="58" rx="33" ry="30" fill="#f0e8e0"/>
+<ellipse cx="60" cy="58" rx="30" ry="27" fill="#f8f2ec"/>
+
+<!-- 前髪 -->
+<path d="M32 50 Q37 37 47 34 Q53 32 56 36 Q58 30 60 28 Q62 30 64 36 Q67 32 73 34 Q83 37 88 50" fill="#f8f2ec" stroke="#e8d8c8" stroke-width="0.3"/>
+
+<!-- 目 -->
+<ellipse cx="49" cy="56" rx="7" ry="7.5" fill="white" stroke="#c0a888" stroke-width="0.5"/>
+<ellipse cx="71" cy="56" rx="7" ry="7.5" fill="white" stroke="#c0a888" stroke-width="0.5"/>
+<ellipse cx="50" cy="56" rx="4" ry="4.5" fill="#2d5016"/>
+<ellipse cx="72" cy="56" rx="4" ry="4.5" fill="#2d5016"/>
+<circle cx="52" cy="53" r="2" fill="white"/>
+<circle cx="74" cy="53" r="2" fill="white"/>
+<circle cx="49" cy="57.5" r="1" fill="white" opacity="0.5"/>
+<circle cx="71" cy="57.5" r="1" fill="white" opacity="0.5"/>
+
+<!-- まつ毛 -->
+<g stroke="#5a4030" stroke-width="0.8" stroke-linecap="round" fill="none">
+  <path d="M42 52 Q40 48 39 46"/>
+  <path d="M43 50 Q42 46 42 44"/>
+  <path d="M78 52 Q80 48 81 46"/>
+  <path d="M77 50 Q78 46 78 44"/>
+</g>
+
+<!-- 鼻 -->
+<ellipse cx="60" cy="63" rx="2.8" ry="2" fill="#ffa0b0"/>
+
+<!-- ほっぺ -->
+<ellipse cx="40" cy="65" rx="5" ry="3" fill="#ffc0cb" opacity="0.35"/>
+<ellipse cx="80" cy="65" rx="5" ry="3" fill="#ffc0cb" opacity="0.35"/>
+
+<!-- 口 -->
+<path d="M56 68 Q60 73 64 68" stroke="#c0908a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+<!-- ひげ -->
+<g stroke="#d0c0b0" stroke-width="0.4" stroke-linecap="round">
+  <line x1="22" y1="58" x2="40" y2="61"/>
+  <line x1="24" y1="64" x2="41" y2="64"/>
+  <line x1="98" y1="58" x2="80" y2="61"/>
+  <line x1="96" y1="64" x2="79" y2="64"/>
+</g>
+
+<!-- 首リボン -->
+<path d="M50 78 Q60 86 70 78" fill="#2d5016"/>
+<path d="M52 79 Q60 84 68 79" fill="#4a7a2e"/>
 
 <!-- 左手（振っている） -->
-<g transform="translate(28, 78) rotate(-25)">
-<ellipse cx="0" cy="0" rx="8" ry="10" fill="#e8e0d8"/>
-<ellipse cx="0" cy="0" rx="6.5" ry="8" fill="#f5f0eb"/>
+<g transform="translate(25, 82) rotate(-30)">
+  <ellipse cx="0" cy="0" rx="7" ry="9" fill="#f0e8e0"/>
+  <ellipse cx="0" cy="0" rx="5.5" ry="7" fill="#f8f2ec"/>
 </g>
 
 <!-- 右手 -->
-<ellipse cx="87" cy="103" rx="8" ry="10" fill="#e8e0d8"/>
-<ellipse cx="87" cy="103" rx="6.5" ry="8" fill="#f5f0eb"/>
+<ellipse cx="88" cy="105" rx="7" ry="9" fill="#f0e8e0"/>
+<ellipse cx="88" cy="105" rx="5.5" ry="7" fill="#f8f2ec"/>
 
 <!-- 足 -->
-<ellipse cx="50" cy="130" rx="9" ry="6" fill="#e8e0d8"/>
-<ellipse cx="50" cy="130" rx="7.5" ry="4.5" fill="#f5f0eb"/>
-<ellipse cx="70" cy="130" rx="9" ry="6" fill="#e8e0d8"/>
-<ellipse cx="70" cy="130" rx="7.5" ry="4.5" fill="#f5f0eb"/>
+<ellipse cx="50" cy="138" rx="8" ry="5.5" fill="#f0e8e0"/>
+<ellipse cx="50" cy="138" rx="6.5" ry="4" fill="#f8f2ec"/>
+<ellipse cx="70" cy="138" rx="8" ry="5.5" fill="#f0e8e0"/>
+<ellipse cx="70" cy="138" rx="6.5" ry="4" fill="#f8f2ec"/>
 </svg>
