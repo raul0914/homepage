@@ -84,7 +84,7 @@ function applyConfig() {
       return;
     }
 
-    if (el.getAttribute('data-config-action')) {
+    if (el.hasAttribute('data-config-action')) {
       el.setAttribute('action', val);
       return;
     }
