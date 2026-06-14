@@ -1,0 +1,86 @@
+<svg viewBox="0 0 70 85" xmlns="http://www.w3.org/2000/svg">
+<!-- ろうむねこ - 考え中ポーズ -->
+<!-- 体 -->
+<ellipse cx="30" cy="62" rx="20" ry="16" fill="#f0e8e0"/>
+<ellipse cx="30" cy="62" rx="18" ry="14" fill="#f8f2ec"/>
+
+<!-- エプロン -->
+<path d="M14 57 L14 74 Q14 78 22 79 L38 79 Q46 78 46 74 L46 57" fill="#3a6a20"/>
+<rect x="14" y="65" width="32" height="2.5" rx="1" fill="#ff8fa0"/>
+
+<!-- 左耳 -->
+<path d="M14 30 L8 12 Q7 9 11 11 L20 22Z" fill="#f0e8e0"/>
+<path d="M15 29 L9 14 Q8 12 12 13 L19 23Z" fill="#f8f2ec"/>
+<!-- 花 -->
+<g transform="translate(7,10) scale(0.55)">
+  <circle cx="0" cy="0" r="4" fill="#ff8fa0"/>
+  <circle cx="0" cy="-3" r="2" fill="#ffaab8"/>
+  <circle cx="3" cy="-1" r="2" fill="#ffaab8"/>
+  <circle cx="2" cy="2.5" r="2" fill="#ffaab8"/>
+  <circle cx="-2" cy="2.5" r="2" fill="#ffaab8"/>
+  <circle cx="-3" cy="-1" r="2" fill="#ffaab8"/>
+  <circle cx="0" cy="0" r="2" fill="#f0d060"/>
+</g>
+
+<!-- 右耳 -->
+<path d="M46 30 L52 12 Q53 9 49 11 L40 22Z" fill="#f0e8e0"/>
+<path d="M45 29 L51 14 Q52 12 48 13 L41 23Z" fill="#f8f2ec"/>
+
+<!-- 頭 -->
+<ellipse cx="30" cy="34" rx="22" ry="20" fill="#f0e8e0"/>
+<ellipse cx="30" cy="34" rx="20" ry="18" fill="#f8f2ec"/>
+
+<!-- 前髪 -->
+<path d="M11 30 Q14 22 22 20 Q26 19 28 22 Q29 18 30 17 Q31 18 32 22 Q34 19 38 20 Q46 22 49 30" fill="#f8f2ec" stroke="#e8d8c8" stroke-width="0.3"/>
+
+<!-- 目（考え中 - 上を見ている） -->
+<ellipse cx="23" cy="31" rx="5" ry="5.5" fill="white" stroke="#c0a888" stroke-width="0.4"/>
+<ellipse cx="37" cy="31" rx="5" ry="5.5" fill="white" stroke="#c0a888" stroke-width="0.4"/>
+<ellipse cx="24" cy="29" rx="3" ry="3.5" fill="#2d5016"/>
+<ellipse cx="38" cy="29" rx="3" ry="3.5" fill="#2d5016"/>
+<circle cx="26" cy="27" r="1.5" fill="white"/>
+<circle cx="40" cy="27" r="1.5" fill="white"/>
+
+<!-- まつ毛 -->
+<g stroke="#5a4030" stroke-width="0.6" stroke-linecap="round" fill="none">
+  <path d="M18 28 Q17 25 16 24"/>
+  <path d="M42 28 Q43 25 44 24"/>
+</g>
+
+<!-- 鼻 -->
+<ellipse cx="30" cy="37" rx="2" ry="1.5" fill="#ffa0b0"/>
+
+<!-- ほっぺ -->
+<ellipse cx="18" cy="39" rx="3.5" ry="2" fill="#ffc0cb" opacity="0.35"/>
+<ellipse cx="42" cy="39" rx="3.5" ry="2" fill="#ffc0cb" opacity="0.35"/>
+
+<!-- 口（ちょっと考え中） -->
+<path d="M28 41 Q30 42 32 41" stroke="#c0908a" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+
+<!-- ひげ -->
+<g stroke="#d0c0b0" stroke-width="0.3" stroke-linecap="round">
+  <line x1="8" y1="34" x2="19" y2="36"/>
+  <line x1="9" y1="38" x2="20" y2="38"/>
+  <line x1="52" y1="34" x2="41" y2="36"/>
+  <line x1="51" y1="38" x2="40" y2="38"/>
+</g>
+
+<!-- 右手（あごに手を当てる） -->
+<ellipse cx="44" cy="44" rx="5" ry="5" fill="#f0e8e0"/>
+<ellipse cx="44" cy="44" rx="4" ry="4" fill="#f8f2ec"/>
+
+<!-- 左手 -->
+<ellipse cx="12" cy="58" rx="5" ry="6" fill="#f0e8e0"/>
+<ellipse cx="12" cy="58" rx="4" ry="5" fill="#f8f2ec"/>
+
+<!-- はてなマーク -->
+<g transform="translate(52, 8)">
+  <text x="0" y="0" font-size="16" font-weight="bold" fill="#ff8fa0" font-family="sans-serif">?</text>
+</g>
+
+<!-- 足 -->
+<ellipse cx="23" cy="78" rx="6" ry="4" fill="#f0e8e0"/>
+<ellipse cx="23" cy="78" rx="5" ry="3" fill="#f8f2ec"/>
+<ellipse cx="37" cy="78" rx="6" ry="4" fill="#f0e8e0"/>
+<ellipse cx="37" cy="78" rx="5" ry="3" fill="#f8f2ec"/>
+</svg>

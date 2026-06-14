@@ -1,0 +1,85 @@
+<svg viewBox="0 0 70 80" xmlns="http://www.w3.org/2000/svg">
+<!-- ろうむねこ - 案内ポーズ（右手で指差し） -->
+<!-- 体 -->
+<ellipse cx="30" cy="60" rx="20" ry="16" fill="#f0e8e0"/>
+<ellipse cx="30" cy="60" rx="18" ry="14" fill="#f8f2ec"/>
+
+<!-- エプロン -->
+<path d="M14 55 L14 72 Q14 76 22 77 L38 77 Q46 76 46 72 L46 55" fill="#3a6a20"/>
+<rect x="14" y="63" width="32" height="2.5" rx="1" fill="#ff8fa0"/>
+<path d="M30 62 L27 67 Q26 68 28 68 L32 68 Q34 68 33 67Z" fill="#ff8fa0"/>
+
+<!-- 左耳 -->
+<path d="M14 28 L8 10 Q7 7 11 9 L20 20Z" fill="#f0e8e0"/>
+<path d="M15 27 L9 12 Q8 10 12 11 L19 21Z" fill="#f8f2ec"/>
+<!-- 花 -->
+<g transform="translate(7,8) scale(0.55)">
+  <circle cx="0" cy="0" r="4" fill="#ff8fa0"/>
+  <circle cx="0" cy="-3" r="2" fill="#ffaab8"/>
+  <circle cx="3" cy="-1" r="2" fill="#ffaab8"/>
+  <circle cx="2" cy="2.5" r="2" fill="#ffaab8"/>
+  <circle cx="-2" cy="2.5" r="2" fill="#ffaab8"/>
+  <circle cx="-3" cy="-1" r="2" fill="#ffaab8"/>
+  <circle cx="0" cy="0" r="2" fill="#f0d060"/>
+</g>
+
+<!-- 右耳 -->
+<path d="M46 28 L52 10 Q53 7 49 9 L40 20Z" fill="#f0e8e0"/>
+<path d="M45 27 L51 12 Q52 10 48 11 L41 21Z" fill="#f8f2ec"/>
+
+<!-- 頭 -->
+<ellipse cx="30" cy="32" rx="22" ry="20" fill="#f0e8e0"/>
+<ellipse cx="30" cy="32" rx="20" ry="18" fill="#f8f2ec"/>
+
+<!-- 前髪 -->
+<path d="M11 28 Q14 20 22 18 Q26 17 28 20 Q29 16 30 15 Q31 16 32 20 Q34 17 38 18 Q46 20 49 28" fill="#f8f2ec" stroke="#e8d8c8" stroke-width="0.3"/>
+
+<!-- 目（ウインク - 左目閉じ） -->
+<ellipse cx="37" cy="30" rx="5" ry="5.5" fill="white" stroke="#c0a888" stroke-width="0.4"/>
+<ellipse cx="38" cy="30" rx="3" ry="3.5" fill="#2d5016"/>
+<circle cx="40" cy="28" r="1.5" fill="white"/>
+<!-- 左目ウインク -->
+<path d="M18 30 Q23 33 28 30" stroke="#5a4030" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+<!-- まつ毛 -->
+<g stroke="#5a4030" stroke-width="0.6" stroke-linecap="round" fill="none">
+  <path d="M42 27 Q43 24 44 23"/>
+  <path d="M18 28 Q16 25 15 24"/>
+</g>
+
+<!-- 鼻 -->
+<ellipse cx="30" cy="35" rx="2" ry="1.5" fill="#ffa0b0"/>
+
+<!-- ほっぺ -->
+<ellipse cx="18" cy="37" rx="3.5" ry="2" fill="#ffc0cb" opacity="0.4"/>
+<ellipse cx="42" cy="37" rx="3.5" ry="2" fill="#ffc0cb" opacity="0.35"/>
+
+<!-- 口 -->
+<path d="M27 39 Q30 42 33 39" stroke="#c0908a" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+
+<!-- ひげ -->
+<g stroke="#d0c0b0" stroke-width="0.3" stroke-linecap="round">
+  <line x1="8" y1="32" x2="19" y2="34"/>
+  <line x1="9" y1="36" x2="20" y2="36"/>
+  <line x1="52" y1="32" x2="41" y2="34"/>
+  <line x1="51" y1="36" x2="40" y2="36"/>
+</g>
+
+<!-- 左手 -->
+<ellipse cx="12" cy="56" rx="5" ry="6" fill="#f0e8e0"/>
+<ellipse cx="12" cy="56" rx="4" ry="5" fill="#f8f2ec"/>
+
+<!-- 右手（指差し） -->
+<g transform="translate(48, 48) rotate(-30)">
+  <ellipse cx="0" cy="0" rx="5" ry="6" fill="#f0e8e0"/>
+  <ellipse cx="0" cy="0" rx="4" ry="5" fill="#f8f2ec"/>
+  <!-- 指 -->
+  <ellipse cx="5" cy="-4" rx="2" ry="1.2" fill="#f8f2ec" transform="rotate(-20)"/>
+</g>
+
+<!-- 足 -->
+<ellipse cx="23" cy="76" rx="6" ry="4" fill="#f0e8e0"/>
+<ellipse cx="23" cy="76" rx="5" ry="3" fill="#f8f2ec"/>
+<ellipse cx="37" cy="76" rx="6" ry="4" fill="#f0e8e0"/>
+<ellipse cx="37" cy="76" rx="5" ry="3" fill="#f8f2ec"/>
+</svg>

@@ -436,6 +436,92 @@ table { border-collapse: collapse; width: 100%; }
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
 }
 
+/* ===== Mini Mascots (decorative) ===== */
+.mini-mascot {
+  display: inline-block;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.08));
+}
+.mini-mascot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mini-mascot-40 img { width: 40px; }
+.mini-mascot-50 img { width: 50px; }
+.mini-mascot-60 img { width: 60px; }
+.mini-mascot-70 img { width: 70px; }
+
+.mini-mascot-float {
+  animation: mascot-float 3s ease-in-out infinite;
+}
+.mini-mascot-float-delay {
+  animation: mascot-float 3s ease-in-out 1.5s infinite;
+}
+.mini-mascot-sway {
+  animation: mascot-sway 4s ease-in-out infinite;
+}
+@keyframes mascot-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.section-mascot-right {
+  float: right;
+  margin: -0.5rem 0 0.5rem 1rem;
+}
+.section-mascot-left {
+  float: left;
+  margin: -0.5rem 1rem 0.5rem 0;
+}
+.section-mascot-center {
+  display: block;
+  margin: 1rem auto;
+  text-align: center;
+}
+.section-mascot-inline {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.5rem;
+}
+.section-mascot-corner {
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  z-index: 1;
+}
+.section-mascot-corner-left {
+  position: absolute;
+  bottom: -10px;
+  left: 20px;
+  z-index: 1;
+}
+
+.cta-mascot-right {
+  position: absolute;
+  right: 2rem;
+  bottom: 1rem;
+  opacity: 0.9;
+}
+.cta-mascot-left {
+  position: absolute;
+  left: 2rem;
+  bottom: 1rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .mini-mascot-40 img { width: 30px; }
+  .mini-mascot-50 img { width: 35px; }
+  .mini-mascot-60 img { width: 42px; }
+  .mini-mascot-70 img { width: 50px; }
+  .cta-mascot-right,
+  .cta-mascot-left { display: none; }
+  .section-mascot-corner,
+  .section-mascot-corner-left { display: none; }
+}
+
 /* ===== Service Page ===== */
 .page-header {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
