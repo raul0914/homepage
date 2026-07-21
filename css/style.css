@@ -355,6 +355,7 @@ table { border-collapse: collapse; width: 100%; }
   height: auto;
   filter: drop-shadow(0 4px 12px rgba(45,80,22,0.12));
   animation: mascot-float 3s ease-in-out infinite;
+  cursor: pointer;
 }
 @keyframes mascot-float {
   0%, 100% { transform: translateY(0); }
@@ -434,12 +435,13 @@ table { border-collapse: collapse; width: 100%; }
   margin: 0 auto 0.8rem;
   display: block;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+  cursor: pointer;
 }
 
 /* ===== Mini Mascots (decorative) ===== */
 .mini-mascot {
   display: inline-block;
-  pointer-events: none;
+  cursor: pointer;
   user-select: none;
   filter: drop-shadow(0 1px 3px rgba(0,0,0,0.08));
 }
@@ -465,6 +467,23 @@ table { border-collapse: collapse; width: 100%; }
 @keyframes mascot-sway {
   0%, 100% { transform: rotate(-3deg); }
   50% { transform: rotate(3deg); }
+}
+
+/* ===== Mascot Dance (hover / click interaction) ===== */
+.mascot-image img.mascot-dancing,
+.cta-mascot.mascot-dancing,
+.mini-mascot.mascot-dancing {
+  animation: mascot-dance 0.8s ease-in-out 2;
+  transform-origin: 50% 50%;
+}
+@keyframes mascot-dance {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); }
+  15%  { transform: translateY(-10px) rotate(-12deg) scale(1.08); }
+  30%  { transform: translateY(0) rotate(10deg) scale(0.96); }
+  45%  { transform: translateY(-14px) rotate(-10deg) scale(1.1); }
+  60%  { transform: translateY(0) rotate(8deg) scale(0.97); }
+  75%  { transform: translateY(-6px) rotate(-5deg) scale(1.05); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
 }
 
 .section-mascot-right {

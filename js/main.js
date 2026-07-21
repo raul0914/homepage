@@ -81,4 +81,21 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  // Mascot dance interaction (hover / click / tap)
+  var mascots = document.querySelectorAll('.mascot-image img, .cta-mascot, .mini-mascot');
+  mascots.forEach(function(mascot) {
+    function danceOnce() {
+      if (mascot.classList.contains('mascot-dancing')) return;
+      mascot.classList.add('mascot-dancing');
+    }
+    mascot.addEventListener('mouseenter', danceOnce);
+    mascot.addEventListener('click', danceOnce);
+    mascot.addEventListener('touchstart', danceOnce, { passive: true });
+    mascot.addEventListener('animationend', function(e) {
+      if (e.animationName === 'mascot-dance') {
+        mascot.classList.remove('mascot-dancing');
+      }
+    });
+  });
 });
