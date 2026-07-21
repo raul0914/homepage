@@ -1,5 +1,5 @@
 var OFFICE_CONFIG_DEFAULTS = {
-  officeName: "本部長社労士事務所",
+  officeName: "本部長社会保険労務士事務所",
   phone: "03-1234-5678",
   fax: "03-1234-5679",
   email: "info@honbucho-sr.example.com",
