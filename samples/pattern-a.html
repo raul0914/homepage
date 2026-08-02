@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サンプルA｜上品フェード（リュウミン・上品トンマナ版） - 本部長社会保険労務士事務所</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* ===================================================
+       パターンA：上品フェード（リュウミン・上品トンマナ版）
+       - 見出しフォントをリュウミン優先のスタックに変更
+       - スクロール連動の演出は、明朝体の落ち着いた雰囲気に
+         合わせて金色基調の控えめなトーンに調整
+       - 要素がふわっと下から浮かび上がる
+       - ヘッダーがスクロールで細くなる
+       - 数字がカウントアップする
+
+       ※リュウミンはモリサワの商用書体のため、CDN配信はできません。
+         このページを閲覧するPCにリュウミンがインストールされて
+         いる場合はそれが使われ、なければ游明朝体／ヒラギノ明朝／
+         Noto Serif JP の順で自然にフォールバックします。
+         本番でリュウミンを確実に表示するには、TypeSquare等の
+         Webフォント配信サービスの契約が別途必要です。
+       =================================================== */
+
+    :root {
+      --font-heading: "Ryumin Pro", "リュウミン Pro", "A-OTF リュウミン Pro",
+                       "YuMincho", "Yu Mincho", "游明朝", "游明朝体",
+                       "Hiragino Mincho ProN", "Noto Serif JP", serif;
+    }
+
+    /* --- サンプル用のラベル（本番では不要） --- */
+    .demo-badge {
+      position: fixed; right: 16px; bottom: 16px; z-index: 2000;
+      background: var(--color-primary-dark); color: #fff;
+      padding: 0.6rem 1.1rem; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .demo-badge a { color: #c9e8a8; margin-left: 0.6rem; }
+
+    /* --- 1. スクロールで浮かび上がる --- */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--reveal-delay, 0s);
+    }
+    [data-reveal].is-visible { opacity: 1; transform: none; }
+
+    /* 左右から出るバリエーション */
+    [data-reveal="left"]  { transform: translateX(-32px); }
+    [data-reveal="right"] { transform: translateX(32px); }
+    [data-reveal="zoom"]  { transform: scale(0.94); }
+
+    /* --- 2. 見出しの下線が伸びる --- */
+    .section-title::after { width: 0; transition: width 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s; }
+    .section-title.is-visible::after { width: 60px; }
+
+    /* --- 3. ヘッダーがスクロールで縮む --- */
+    .header { transition: height 0.35s ease, box-shadow 0.35s ease, background 0.35s ease; }
+    .header.is-shrunk { height: 62px; box-shadow: 0 2px 20px rgba(0,0,0,0.12); }
+    .header.is-shrunk .header-logo a { font-size: 1.12rem; }
+    .header.is-shrunk .header-hours { display: none; }
+
+    /* --- 4. カードのホバーを少しリッチに --- */
+    .strength-card { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease; }
+    .strength-card:hover { transform: translateY(-8px); }
+    .strength-card .strength-icon { transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), background 0.3s ease; }
+    .strength-card:hover .strength-icon { transform: scale(1.12) rotate(-8deg); }
+
+    .concern-card { transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+    .concern-card:hover { transform: translateX(6px); }
+    .concern-card .concern-icon { transition: transform 0.35s ease; }
+    .concern-card:hover .concern-icon { transform: scale(1.15); }
+
+    /* --- 5. お知らせが1件ずつ流れ込む --- */
+    .news-item { transition: background 0.25s ease, padding-left 0.25s ease; }
+    .news-item:hover { background: var(--color-primary-pale); padding-left: 0.8rem; }
+
+    /* --- 6. 数字で見る実績（カウントアップ） --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      text-align: center;
+    }
+    .stat-card {
+      background: var(--color-white);
+      border-radius: 12px;
+      padding: 2rem 1rem;
+      box-shadow: var(--shadow-card);
+    }
+    .stat-num {
+      font-family: var(--font-heading);
+      font-size: clamp(2.2rem, 6vw, 3rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1.2;
+    }
+    .stat-num .unit { font-size: 1.1rem; margin-left: 0.15rem; color: var(--color-primary-light); }
+    .stat-label { font-size: 0.9rem; color: var(--color-text-light); margin-top: 0.4rem; }
+
+    /* --- 7. ヒーローの文字を順番に出す（明朝体らしく字間ゆったりと） --- */
+    .hero-title {
+      letter-spacing: 0.06em;
+      position: relative;
+      padding-left: 1.1rem;
+    }
+    .hero-title::before {
+      content: ''; position: absolute; left: 0; top: 0.15em; bottom: 0.15em;
+      width: 2px; background: var(--color-accent); opacity: 0.85;
+    }
+    .hero-overlay > * { opacity: 0; animation: hero-in 0.9s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .hero-overlay > *:nth-child(1) { animation-delay: 0.15s; }
+    .hero-overlay > *:nth-child(2) { animation-delay: 0.40s; }
+    .hero-overlay > *:nth-child(3) { animation-delay: 0.65s; }
+    @keyframes hero-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* --- 8. ボタンに光が走る --- */
+    .btn { position: relative; overflow: hidden; }
+    .btn::after {
+      content: ''; position: absolute; top: 0; left: -120%;
+      width: 60%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+    .btn:hover::after { left: 130%; }
+
+    /* --- 10. ヒーローに、金箔のようなごく淡い光がゆっくり通り抜ける --- */
+    .shine-sweep {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1;
+    }
+    .shine-sweep::before {
+      content: ''; position: absolute; top: -20%; left: -30%;
+      width: 32%; height: 140%;
+      background: linear-gradient(100deg, transparent, rgba(255,248,220,0.28), transparent);
+      transform: skewX(-18deg);
+      animation: shine-move 10s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+    @keyframes shine-move {
+      0%   { left: -40%; }
+      25%  { left: 120%; }
+      100% { left: 120%; }
+    }
+
+    /* --- 11. CTAボタンは金の輪が静かに広がる、上品な誘い --- */
+    .cta-glow { animation: cta-glow 3.2s ease-in-out infinite; }
+    @keyframes cta-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201,169,110,0.5); }
+      50%      { box-shadow: 0 0 0 8px rgba(201,169,110,0); }
+    }
+
+    /* --- 12. 重要タグは点滅させず、静かに佇む縁取りで注意を引く --- */
+    .news-tag.important {
+      background: #a3382c;
+      animation: tag-breathe 3.4s ease-in-out infinite;
+    }
+    @keyframes tag-breathe {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(163,56,44,0.35); }
+      50%      { box-shadow: 0 0 0 4px rgba(163,56,44,0); }
+    }
+
+    /* --- 13. マスコットまわりに、控えめな金のきらめき --- */
+    .sparkle-wrap { position: relative; display: inline-block; }
+    .sparkle {
+      position: absolute; width: 9px; height: 9px; pointer-events: none;
+      background: radial-gradient(circle, #fff 0%, var(--color-accent) 60%, transparent 70%);
+      clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+      opacity: 0; animation: sparkle-twinkle 3.4s ease-in-out infinite;
+    }
+    @keyframes sparkle-twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+      50%      { opacity: 0.75; transform: scale(0.9) rotate(90deg); }
+    }
+
+    /* --- 14. カードが出現するとき、アイコンにも光が走る --- */
+    .strength-icon { position: relative; overflow: hidden; }
+    .strength-icon::after {
+      content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.8), transparent);
+      transform: skewX(-20deg);
+    }
+    .strength-card.is-visible .strength-icon::after { animation: icon-flash 0.9s ease 0.5s 1; }
+    @keyframes icon-flash { from { left: -60%; } to { left: 140%; } }
+
+    /* --- 15. 数字カードは弾みながら登場 --- */
+    [data-reveal="zoom"] { transform: scale(0.7) translateY(10px); }
+    [data-reveal="zoom"].is-visible {
+      transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* --- 9. トップへ戻るボタン --- */
+    .to-top {
+      position: fixed; right: 20px; bottom: 76px; z-index: 900;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--color-primary); color: #fff;
+      display: grid; place-items: center;
+      opacity: 0; pointer-events: none; transform: translateY(12px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
+      box-shadow: var(--shadow-card); border: none; cursor: pointer;
+    }
+    .to-top.is-shown { opacity: 1; pointer-events: auto; transform: none; }
+    .to-top:hover { background: var(--color-primary-dark); }
+    .to-top svg { width: 20px; height: 20px; fill: #fff; }
+
+    /* --- 視差軽減設定のユーザーには動きを止める --- */
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .hero-overlay > * { opacity: 1; animation: none; }
+      .section-title::after { width: 60px; transition: none; }
+      .shine-sweep, .sparkle { display: none; }
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="header-logo">
+        <a href="index.html">
+          <svg class="logo-icon" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="17" fill="none" stroke="#2d5016" stroke-width="2"/>
+            <path d="M18 6 C18 6, 12 14, 12 20 C12 24, 14.5 28, 18 28 C21.5 28, 24 24, 24 20 C24 14, 18 6, 18 6Z" fill="#2d5016" opacity="0.8"/>
+            <path d="M18 10 C18 10, 14 16, 14 20 C14 23, 15.5 26, 18 26 C20.5 26, 22 23, 22 20 C22 16, 18 10, 18 10Z" fill="#4a7a2e"/>
+          </svg>
+          <span>本部長社会保険労務士事務所</span>
+        </a>
+      </div>
+      <div class="header-info">
+        <div class="header-hours">
+          <div>平日 9:00〜18:00</div>
+          <div style="font-size:0.75rem;">土日祝休み</div>
+        </div>
+        <a href="tel:03-1234-5678" class="header-phone">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.3 15.3 0 006.6 6.6l2.2-2.2a1 1 0 011-.2 11.4 11.4 0 003.6.6 1 1 0 011 1v3.4a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.3 1z"/></svg>
+          03-1234-5678
+        </a>
+        <div class="header-cta">
+          <a href="#contact" class="btn btn-primary">無料相談</a>
+        </div>
+      </div>
+      <button class="nav-toggle" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav">
+    <div class="container">
+      <ul class="nav-list">
+        <li><a href="#" class="active">ホーム</a></li>
+        <li><a href="#strength">業務案内</a></li>
+        <li><a href="#stats">料金表</a></li>
+        <li><a href="#concern">事務所概要</a></li>
+        <li><a href="#news">よくある質問</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <svg class="hero-illustration" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="1200" height="500" fill="#e8f0e2"/>
+      <rect x="0" y="400" width="1200" height="100" fill="#d4c4a0" opacity="0.3"/>
+      <rect x="80" y="40" width="300" height="200" rx="8" fill="#ffffff" stroke="#c5d6b8" stroke-width="3"/>
+      <line x1="230" y1="40" x2="230" y2="240" stroke="#c5d6b8" stroke-width="2"/>
+      <line x1="80" y1="140" x2="380" y2="140" stroke="#c5d6b8" stroke-width="2"/>
+      <rect x="90" y="50" width="130" height="85" fill="#d4eac4" opacity="0.5"/>
+      <rect x="240" y="50" width="130" height="85" fill="#c8e0f0" opacity="0.5"/>
+      <rect x="90" y="148" width="130" height="85" fill="#c8e0f0" opacity="0.5"/>
+      <rect x="240" y="148" width="130" height="85" fill="#d4eac4" opacity="0.5"/>
+      <rect x="820" y="40" width="160" height="220" rx="4" fill="#a07850" opacity="0.6"/>
+      <rect x="830" y="50" width="140" height="3" fill="#8b6840"/>
+      <rect x="830" y="100" width="140" height="3" fill="#8b6840"/>
+      <rect x="830" y="150" width="140" height="3" fill="#8b6840"/>
+      <rect x="838" y="55" width="12" height="42" rx="1" fill="#3a7a5a"/>
+      <rect x="854" y="60" width="10" height="37" rx="1" fill="#5a4a8a"/>
+      <rect x="868" y="55" width="14" height="42" rx="1" fill="#c0392b" opacity="0.7"/>
+      <rect x="886" y="58" width="11" height="39" rx="1" fill="#2d5016"/>
+      <rect x="838" y="105" width="15" height="42" rx="1" fill="#d4a050"/>
+      <rect x="857" y="108" width="10" height="39" rx="1" fill="#4a7a2e"/>
+      <rect x="871" y="105" width="13" height="42" rx="1" fill="#3a5a8a"/>
+      <rect x="250" y="310" width="700" height="15" rx="4" fill="#b8956a"/>
+      <rect x="280" y="325" width="12" height="80" fill="#a07850"/>
+      <rect x="908" y="325" width="12" height="80" fill="#a07850"/>
+      <rect x="500" y="265" width="100" height="65" rx="4" fill="#555"/>
+      <rect x="505" y="270" width="90" height="50" rx="2" fill="#88c8f8"/>
+      <rect x="480" y="305" width="140" height="8" rx="3" fill="#666"/>
+      <ellipse cx="420" cy="295" rx="18" ry="6" fill="#8b6840"/>
+      <rect x="402" y="280" width="36" height="18" rx="4" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+      <rect x="50" y="320" width="60" height="80" rx="8" fill="#8b6840" opacity="0.7"/>
+      <rect x="45" y="310" width="70" height="15" rx="6" fill="#9a7850"/>
+      <path d="M80 310 C60 280, 20 260, 10 230 Q15 250, 30 260 Q20 240, 25 220 Q35 245, 50 255 Q40 235, 45 215 Q55 240, 65 258 Q60 230, 70 210 Q78 240, 80 260Z" fill="#2d5016"/>
+      <path d="M80 310 C90 275, 120 255, 140 225 Q130 250, 115 260 Q130 240, 125 218 Q112 245, 100 258 Q115 230, 105 210 Q95 240, 85 260Z" fill="#3a8a2e"/>
+      <rect x="1030" y="280" width="50" height="120" rx="8" fill="#8b6840" opacity="0.7"/>
+      <rect x="1048" y="120" width="14" height="155" fill="#7a5a3a"/>
+      <ellipse cx="1055" cy="140" rx="65" ry="55" fill="#2d5016"/>
+      <ellipse cx="1040" cy="130" rx="50" ry="40" fill="#3a8a2e"/>
+      <ellipse cx="1070" cy="145" rx="45" ry="35" fill="#4a7a2e"/>
+      <circle cx="570" cy="200" r="30" fill="#e8b888"/>
+      <path d="M540 195 Q540 168, 570 162 Q600 168, 600 195 Q598 185, 585 180 Q575 178, 560 180 Q548 185, 543 195Z" fill="#2a2015"/>
+      <circle cx="560" cy="200" r="2.5" fill="#2a2015"/>
+      <circle cx="580" cy="200" r="2.5" fill="#2a2015"/>
+      <path d="M563 212 Q570 217, 577 212" fill="none" stroke="#a08060" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M545 230 Q548 270, 555 310 L585 310 Q592 270, 595 230 Q585 224, 570 222 Q555 224, 545 230Z" fill="#2d5016"/>
+      <path d="M570 230 L567 260 L570 270 L573 260Z" fill="#c9a96e"/>
+      <path d="M558 228 L570 240 L582 228" fill="none" stroke="#fff" stroke-width="2"/>
+      <circle cx="750" cy="230" r="26" fill="#f5d0b0"/>
+      <path d="M724 225 Q724 200, 750 195 Q776 200, 776 225 Q773 215, 765 212 Q755 210, 745 212 Q735 215, 727 222Z" fill="#6a3020"/>
+      <circle cx="742" cy="230" r="2" fill="#4a3020"/>
+      <circle cx="758" cy="230" r="2" fill="#4a3020"/>
+      <path d="M730 256 Q732 280, 738 310 L762 310 Q768 280, 770 256 Q762 250, 750 248 Q738 250, 730 256Z" fill="#d4856a"/>
+    </svg>
+
+    <div class="shine-sweep"></div>
+
+    <div class="hero-overlay">
+      <h1 class="hero-title">『人』の悩みを解決し、<br>企業の成長を支えます。</h1>
+      <p class="hero-sub">労務管理・社会保険手続き・助成金申請・給与計算のことなら</p>
+      <a href="#contact" class="btn btn-white cta-glow">無料相談はこちら</a>
+    </div>
+  </section>
+
+  <!-- ===== 3つの強み ===== -->
+  <section class="section" id="strength">
+    <div class="container">
+      <h2 class="section-title" data-reveal>当事務所の3つの強み</h2>
+      <p class="section-subtitle" data-reveal>Three Strengths</p>
+      <div class="strengths-grid">
+        <div class="strength-card" data-reveal style="--reveal-delay:0s">
+          <div class="strength-icon">
+            <svg viewBox="0 0 48 48"><path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm-2 30l-10-10 2.83-2.83L22 28.34l13.17-13.17L38 18 22 34z"/></svg>
+          </div>
+          <h3>丁寧なヒアリング</h3>
+          <p>お客様の状況をしっかりとお聞きし、課題の本質を把握。表面的な対応ではなく、根本的な解決策をご提案いたします。</p>
+        </div>
+        <div class="strength-card" data-reveal style="--reveal-delay:0.15s">
+          <div class="strength-icon">
+            <svg viewBox="0 0 48 48"><path d="M40 8H8v32h32V8zM24 38c-7.73 0-14-6.27-14-14S16.27 10 24 10s14 6.27 14 14-6.27 14-14 14zm1-15h8v2h-10V14h2v11z"/></svg>
+          </div>
+          <h3>迅速な対応</h3>
+          <p>急な労務トラブルや届出の期限にも素早く対応。スピード感を大切に、お客様の不安を最小限に抑えます。</p>
+        </div>
+        <div class="strength-card" data-reveal style="--reveal-delay:0.3s">
+          <div class="strength-icon">
+            <svg viewBox="0 0 48 48"><path d="M36 16h-4V8H16v8h-4c-2.2 0-4 1.8-4 4v20h40V20c0-2.2-1.8-4-4-4zM20 12h8v4h-8v-4zm24 24H4V20c0-1.1.9-2 2-2h4v4h4v-4h20v4h4v-4h4c1.1 0 2 .9 2 2v16zM24 24c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"/></svg>
+          </div>
+          <h3>豊富な実績</h3>
+          <p>多様な業種の企業様をサポートしてきた経験を活かし、業界に合った最適なアドバイスをご提供いたします。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 数字で見る実績（カウントアップ） ===== -->
+  <section class="section section-alt" id="stats">
+    <div class="container">
+      <h2 class="section-title" data-reveal>数字で見る当事務所</h2>
+      <p class="section-subtitle" data-reveal>By the Numbers</p>
+      <div class="stats-grid">
+        <div class="stat-card" data-reveal="zoom" style="--reveal-delay:0s">
+          <div class="stat-num"><span class="count" data-count="180">0</span><span class="unit">社</span></div>
+          <div class="stat-label">顧問契約実績</div>
+        </div>
+        <div class="stat-card" data-reveal="zoom" style="--reveal-delay:0.12s">
+          <div class="stat-num"><span class="count" data-count="1250">0</span><span class="unit">件</span></div>
+          <div class="stat-label">年間手続き代行件数</div>
+        </div>
+        <div class="stat-card" data-reveal="zoom" style="--reveal-delay:0.24s">
+          <div class="stat-num"><span class="count" data-count="98">0</span><span class="unit">%</span></div>
+          <div class="stat-label">顧問継続率</div>
+        </div>
+        <div class="stat-card" data-reveal="zoom" style="--reveal-delay:0.36s">
+          <div class="stat-num"><span class="count" data-count="22">0</span><span class="unit">年</span></div>
+          <div class="stat-label">実務経験</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== お悩み ===== -->
+  <section class="section" id="concern">
+    <div class="container">
+      <h2 class="section-title" data-reveal>こんなお悩みありませんか？</h2>
+      <p class="section-subtitle" data-reveal>Common Concerns</p>
+      <div class="concerns-grid">
+        <a href="#" class="concern-card" data-reveal="left" style="--reveal-delay:0s">
+          <svg class="concern-icon" viewBox="0 0 48 48"><path d="M38 6H10c-2.2 0-4 1.8-4 4v28c0 2.2 1.8 4 4 4h28c2.2 0 4-1.8 4-4V10c0-2.2-1.8-4-4-4zm-2 18H26v10h-4V24H12v-4h10V10h4v10h10v4z"/></svg>
+          <div><h3>入退社の手続きが煩雑…</h3><p>社会保険・雇用保険の届出を代行いたします</p></div>
+        </a>
+        <a href="#" class="concern-card" data-reveal="right" style="--reveal-delay:0s">
+          <svg class="concern-icon" viewBox="0 0 48 48"><path d="M8 8h32v6H8V8zm0 10h32v22H8V18zm4 4v14h24V22H12zm4 2h16v2H16v-2zm0 4h12v2H16v-2z"/></svg>
+          <div><h3>就業規則を見直したい</h3><p>法令に準拠した規則の作成・改訂をサポート</p></div>
+        </a>
+        <a href="#" class="concern-card" data-reveal="left" style="--reveal-delay:0.12s">
+          <svg class="concern-icon" viewBox="0 0 48 48"><path d="M24 2C11.85 2 2 11.85 2 24s9.85 22 22 22 22-9.85 22-22S36.15 2 24 2zm-2 6h4v2h-6v4h8c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2h-2v4h-4v-4h-6v-4h8v-4h-8c-1.1 0-2-.9-2-2v-6c0-1.1.9-2 2-2h2V8z"/></svg>
+          <div><h3>助成金を活用したい</h3><p>受給可能な助成金の調査から申請まで一括対応</p></div>
+        </a>
+        <a href="#" class="concern-card" data-reveal="right" style="--reveal-delay:0.12s">
+          <svg class="concern-icon" viewBox="0 0 48 48"><path d="M40 8H8c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h32c2.2 0 4-1.8 4-4V12c0-2.2-1.8-4-4-4zm0 28H8V16h32v20zM16 20h8v4h-8v-4zm0 6h16v2H16v-2zm0 4h12v2H16v-2z"/></svg>
+          <div><h3>給与計算をアウトソースしたい</h3><p>正確・迅速な給与計算代行で業務を効率化</p></div>
+        </a>
+      </div>
+      <div class="concerns-cta" data-reveal>
+        <a href="#" class="btn btn-primary">業務案内を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== お知らせ ===== -->
+  <section class="section section-alt" id="news">
+    <div class="container">
+      <h2 class="section-title" data-reveal>お知らせ</h2>
+      <p class="section-subtitle" data-reveal>News</p>
+      <div class="news-list">
+        <div class="news-item" data-reveal="left" style="--reveal-delay:0s">
+          <span class="news-date">2026.06.01</span>
+          <span class="news-tag important">重要</span>
+          <span class="news-text">2026年度 労働保険年度更新の届出期限は7月10日です</span>
+        </div>
+        <div class="news-item" data-reveal="left" style="--reveal-delay:0.1s">
+          <span class="news-date">2026.05.15</span>
+          <span class="news-tag">お知らせ</span>
+          <span class="news-text">ホームページをリニューアルしました</span>
+        </div>
+        <div class="news-item" data-reveal="left" style="--reveal-delay:0.2s">
+          <span class="news-date">2026.04.01</span>
+          <span class="news-tag info">法改正</span>
+          <span class="news-text">2026年4月施行の改正育児介護休業法に関するご案内</span>
+        </div>
+        <div class="news-item" data-reveal="left" style="--reveal-delay:0.3s">
+          <span class="news-date">2026.03.15</span>
+          <span class="news-tag">お知らせ</span>
+          <span class="news-text">助成金活用セミナーを開催いたします（4月開催予定）</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== マスコット ===== -->
+  <section class="section mascot-section">
+    <div class="container">
+      <div class="mascot-intro">
+        <div class="mascot-image sparkle-wrap" data-reveal="left">
+          <img src="../img/mascot-main.png" alt="しゃろぺん" width="200" height="294">
+          <span class="sparkle" style="top:8%; left:6%; animation-delay:0s"></span>
+          <span class="sparkle" style="top:18%; right:4%; animation-delay:0.8s"></span>
+          <span class="sparkle" style="bottom:20%; left:0%; animation-delay:1.6s"></span>
+        </div>
+        <div class="mascot-text" data-reveal="right" style="--reveal-delay:0.15s">
+          <div class="mascot-bubble">
+            <h2 class="mascot-name">しゃろぺん<span>がご案内します</span></h2>
+            <p>はじめまして、<strong>しゃろぺん</strong>です！<br>労務のお悩み、なんでもご相談くださいペン。</p>
+            <p class="mascot-motto">「あなたの会社の働く環境、わたしが守りますペン！」</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-banner" id="contact">
+    <div class="container">
+      <img src="../img/mascot-main.png" alt="" class="cta-mascot" width="80" height="118">
+      <h2 data-reveal>まずはお気軽にご相談ください</h2>
+      <div class="cta-banner-phone" data-reveal style="--reveal-delay:0.12s">
+        <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.3 15.3 0 006.6 6.6l2.2-2.2a1 1 0 011-.2 11.4 11.4 0 003.6.6 1 1 0 011 1v3.4a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.3 1z"/></svg>
+        <a href="tel:03-1234-5678" style="color:inherit;">03-1234-5678</a>
+      </div>
+      <p class="cta-banner-hours" data-reveal style="--reveal-delay:0.2s">受付時間：平日 9:00〜18:00（土日祝休み）</p>
+      <a href="#" class="btn btn-white cta-glow" data-reveal style="--reveal-delay:0.28s">メールでのお問い合わせ</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <div class="container">&copy; 2026 本部長社会保険労務士事務所 All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <button class="to-top" aria-label="ページ上部へ戻る">
+    <svg viewBox="0 0 24 24"><path d="M12 5l-7 7h4v7h6v-7h4z"/></svg>
+  </button>
+
+  <div class="demo-badge">サンプルA：上品フェード<a href="index.html">← 一覧</a></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* --- スクロール連動フェードイン --- */
+      var targets = document.querySelectorAll('[data-reveal], .section-title');
+      if (reduced || !('IntersectionObserver' in window)) {
+        targets.forEach(function (el) { el.classList.add('is-visible'); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target); // 一度出したら監視をやめる
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+        targets.forEach(function (el) { io.observe(el); });
+      }
+
+      /* --- 数字のカウントアップ --- */
+      var counters = document.querySelectorAll('.count');
+      function runCount(el) {
+        var goal = parseInt(el.dataset.count, 10);
+        if (reduced) { el.textContent = goal.toLocaleString(); return; }
+        var start = performance.now(), dur = 1600;
+        (function step(now) {
+          var p = Math.min((now - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3); // 最後にゆっくり止まる
+          el.textContent = Math.round(goal * eased).toLocaleString();
+          if (p < 1) requestAnimationFrame(step);
+        })(start);
+      }
+      if ('IntersectionObserver' in window) {
+        var co = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { runCount(e.target); co.unobserve(e.target); }
+          });
+        }, { threshold: 0.6 });
+        counters.forEach(function (el) { co.observe(el); });
+      } else {
+        counters.forEach(runCount);
+      }
+
+      /* --- ヘッダー縮小 & トップへ戻る --- */
+      var header = document.querySelector('.header');
+      var toTop = document.querySelector('.to-top');
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          var y = window.scrollY;
+          header.classList.toggle('is-shrunk', y > 120);
+          toTop.classList.toggle('is-shown', y > 500);
+          ticking = false;
+        });
+      }, { passive: true });
+
+      toTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+      });
+
+      /* --- モバイルメニュー --- */
+      var navToggle = document.querySelector('.nav-toggle');
+      var nav = document.querySelector('.nav');
+      navToggle.addEventListener('click', function () {
+        navToggle.classList.toggle('active');
+        nav.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>

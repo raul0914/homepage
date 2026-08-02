@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブログ管理 | 管理画面</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .settings-wrap { max-width: 900px; margin: 0 auto; padding: 2rem clamp(1rem, 4vw, 2rem); }
+    .settings-header { text-align: center; margin-bottom: 1.5rem; }
+    .settings-header h1 { font-family: var(--font-heading); font-size: 1.8rem; color: var(--color-primary-dark); }
+    .settings-header p { color: var(--color-text-light); font-size: 0.9rem; margin-top: 0.5rem; }
+    .settings-links { text-align: center; margin-bottom: 2rem; font-size: 0.85rem; }
+    .settings-links a { margin: 0 0.6rem; color: var(--color-text-light); }
+    .settings-links a:hover { color: var(--color-primary); }
+
+    .field-group { margin-bottom: 1.2rem; }
+    .field-group label { display: block; font-weight: 500; margin-bottom: 0.35rem; font-size: 0.9rem; color: var(--color-primary-dark); }
+    .field-group .hint { font-size: 0.78rem; color: var(--color-text-light); margin-bottom: 0.3rem; }
+    .field-group input, .field-group textarea {
+      width: 100%; padding: 0.65rem 0.9rem; border: 1px solid var(--color-border); border-radius: 8px;
+      font-family: var(--font-base); font-size: 0.92rem; transition: border-color var(--transition);
+    }
+    .field-group input:focus, .field-group textarea:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-pale); }
+    .field-group textarea { min-height: 70px; resize: vertical; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+    .post-card {
+      background: var(--color-white); border: 1px solid var(--color-border); border-radius: 12px;
+      padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-card); position: relative;
+    }
+    .post-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .post-card-head h3 { font-family: var(--font-heading); font-size: 1rem; color: var(--color-primary-dark); }
+    .btn-remove-post {
+      background: #f8d7da; color: #721c24; border: none; border-radius: 6px;
+      padding: 0.4rem 0.9rem; font-size: 0.82rem; cursor: pointer; transition: all var(--transition);
+    }
+    .btn-remove-post:hover { background: #f5c6cb; }
+
+    .btn-add-post {
+      display: block; width: 100%; padding: 1rem; margin-bottom: 1.5rem;
+      background: var(--color-primary-pale); color: var(--color-primary-dark);
+      border: 2px dashed var(--color-primary-light); border-radius: 10px;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all var(--transition);
+    }
+    .btn-add-post:hover { background: var(--color-primary); color: #fff; border-style: solid; }
+
+    .md-import {
+      background: var(--color-primary-pale); border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.4rem;
+    }
+    .md-import label { display: block; font-weight: 700; font-size: 0.88rem; color: var(--color-primary-dark); margin-bottom: 0.3rem; }
+    .md-import .hint { font-size: 0.78rem; color: var(--color-text-light); margin-bottom: 0.6rem; }
+    .md-import input[type="file"] { font-size: 0.8rem; }
+    .btn-md-parse {
+      background: var(--color-primary-light); color: #fff; border: none; border-radius: 6px;
+      padding: 0.45rem 1rem; font-size: 0.8rem; cursor: pointer; margin-left: 0.6rem; transition: all var(--transition);
+    }
+    .btn-md-parse:hover { background: var(--color-primary); }
+
+    .action-bar {
+      position: sticky; bottom: 0; background: white; padding: 1rem 0; border-top: 1px solid var(--color-border);
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; z-index: 10;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+    }
+    .action-bar .btn { font-size: 0.9rem; padding: 0.7rem 1.8rem; }
+    .btn-reset { background: #f8d7da; color: #721c24; }
+    .btn-reset:hover { background: #f5c6cb; transform: translateY(-2px); }
+    .btn-download { background: var(--color-primary-light); color: white; }
+    .btn-download:hover { background: var(--color-primary); color: white; transform: translateY(-2px); }
+
+    .toast {
+      position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-20px);
+      background: var(--color-primary); color: white; padding: 0.8rem 2rem; border-radius: 8px;
+      font-size: 0.9rem; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 9999;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 768px) {
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body style="padding-top: 0;">
+
+  <div class="settings-wrap">
+    <div class="settings-header">
+      <h1>ブログ管理</h1>
+      <p>ここで記事を追加・編集して保存すると、ブログページに自動的に反映されます。</p>
+    </div>
+    <div class="settings-links">
+      <a href="blog.html" target="_blank" rel="noopener">→ ブログページを見る</a>
+      <a href="settings.html">→ サイト設定へ</a>
+    </div>
+
+    <button class="btn-add-post" onclick="addPost()">＋ 新しい記事を追加</button>
+
+    <div id="postList"></div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="btn btn-primary" onclick="savePosts()">保存する</button>
+      <button class="btn btn-download" onclick="downloadBlogData()">blog-data.js をダウンロード</button>
+      <button class="btn btn-reset" onclick="resetPosts()">初期値に戻す</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/markdown.js"></script>
+  <script src="js/blog-data.js"></script>
+  <script>
+    var editingPosts = [];
+
+    function loadPosts() {
+      editingPosts = getBlogPosts();
+      renderPostList();
+    }
+
+    function renderPostList() {
+      var container = document.getElementById('postList');
+      container.innerHTML = '';
+      if (!editingPosts.length) {
+        container.innerHTML = '<p style="text-align:center; color:var(--color-text-light); padding:2rem 0;">記事がありません。「＋ 新しい記事を追加」から作成してください。</p>';
+        return;
+      }
+      editingPosts.forEach(function (post, i) {
+        var card = document.createElement('div');
+        card.className = 'post-card';
+        card.setAttribute('data-idx', i);
+        card.innerHTML =
+          '<div class="post-card-head">' +
+            '<h3>記事 ' + (i + 1) + '</h3>' +
+            '<button class="btn-remove-post" onclick="removePost(' + i + ')">この記事を削除</button>' +
+          '</div>' +
+          '<input type="hidden" data-field="id" value="' + esc(post.id) + '">' +
+
+          '<div class="md-import">' +
+            '<label>Markdown原稿から自動入力</label>' +
+            '<p class="hint">下書きファイル（frontmatter付きMarkdown）の中身をまるごと下の「本文」欄に貼り付けるだけで、タイトル・公開日・抜粋・本文が自動的に入力されます。ファイルを直接選んで読み込むこともできます。</p>' +
+            '<input type="file" accept=".md,.markdown,text/markdown,text/plain" onchange="handleMdFile(this, ' + i + ')">' +
+          '</div>' +
+
+          '<div class="field-group">' +
+            '<label>タイトル</label>' +
+            '<input type="text" data-field="title" value="' + esc(post.title) + '">' +
+          '</div>' +
+          '<div class="field-row">' +
+            '<div class="field-group">' +
+              '<label>公開日</label>' +
+              '<input type="date" data-field="date" value="' + esc(post.date) + '">' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label>カテゴリ</label>' +
+              '<input type="text" data-field="category" value="' + esc(post.category) + '" placeholder="例: 法改正 / 助成金 / 手続き">' +
+            '</div>' +
+          '</div>' +
+          '<div class="field-group">' +
+            '<label>サムネイル画像URL（任意）</label>' +
+            '<p class="hint">空欄の場合はアイコンが表示されます</p>' +
+            '<input type="text" data-field="thumbnail" value="' + esc(post.thumbnail || '') + '" placeholder="img/blog/sample.jpg">' +
+          '</div>' +
+          '<div class="field-group">' +
+            '<label>抜粋（一覧に表示される要約文）</label>' +
+            '<textarea data-field="excerpt" rows="2">' + esc(post.excerpt || '') + '</textarea>' +
+          '</div>' +
+          '<div class="field-group">' +
+            '<label>本文<button type="button" class="btn-md-parse" onclick="handleForceImport(' + i + ')">この内容で自動入力し直す</button></label>' +
+            '<p class="hint">Markdown原稿をそのまま貼り付けられます（見出し ## ・箇条書き - ・太字 **text** に対応）。空行で段落が分かれます。</p>' +
+            '<textarea data-field="body" rows="10" placeholder="ここに記事下書き(.md)の中身を貼り付けてください" onpaste="setTimeout(function(){ handleBodyPaste(' + i + '); }, 0)">' + esc(post.body || '') + '</textarea>' +
+          '</div>';
+        container.appendChild(card);
+      });
+    }
+
+    function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function getCardByIdx(i) {
+      return document.querySelector('.post-card[data-idx="' + i + '"]');
+    }
+
+    function fillFromParsed(card, parsed, force) {
+      var titleEl = card.querySelector('[data-field="title"]');
+      var dateEl = card.querySelector('[data-field="date"]');
+      var excerptEl = card.querySelector('[data-field="excerpt"]');
+      var bodyEl = card.querySelector('[data-field="body"]');
+
+      if (parsed.title && (force || !titleEl.value.trim())) titleEl.value = parsed.title;
+      if (parsed.date && (force || !dateEl.value.trim())) dateEl.value = parsed.date;
+      if (parsed.excerpt && (force || !excerptEl.value.trim())) excerptEl.value = parsed.excerpt;
+      bodyEl.value = parsed.body;
+      showToast('Markdown原稿から自動入力しました');
+    }
+
+    // 「本文」欄への貼り付けが記事下書き（frontmatter付き等）らしき場合に自動解析する
+    function handleBodyPaste(i) {
+      var card = getCardByIdx(i);
+      var bodyEl = card.querySelector('[data-field="body"]');
+      var raw = bodyEl.value;
+      var looksLikeDraft = /^---/.test(raw.trim()) || raw.indexOf('タイトル') !== -1 || raw.indexOf('##') !== -1;
+      if (!looksLikeDraft) return;
+      var parsed = parseArticleMarkdown(raw);
+      fillFromParsed(card, parsed, false);
+    }
+
+    // 「この内容で自動入力し直す」ボタン：既存の値も含めて上書き
+    function handleForceImport(i) {
+      var card = getCardByIdx(i);
+      var bodyEl = card.querySelector('[data-field="body"]');
+      if (!bodyEl.value.trim()) { showToast('本文が空です'); return; }
+      if (!confirm('タイトル・公開日・抜粋を、本文の内容から自動入力し直します。よろしいですか？')) return;
+      var parsed = parseArticleMarkdown(bodyEl.value);
+      fillFromParsed(card, parsed, true);
+    }
+
+    // ファイルを直接選んで読み込む場合
+    function handleMdFile(input, i) {
+      var file = input.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var card = getCardByIdx(i);
+        var hasContent = card.querySelector('[data-field="title"]').value.trim() ||
+                          card.querySelector('[data-field="body"]').value.trim();
+        if (hasContent && !confirm('このファイルの内容で、現在の入力内容を上書きします。よろしいですか？')) {
+          input.value = '';
+          return;
+        }
+        var parsed = parseArticleMarkdown(e.target.result, file.name);
+        fillFromParsed(card, parsed, true);
+        input.value = '';
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    function slugify(title, date) {
+      var base = (date || '') + '-' + (title || 'post').trim()
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, '-')
+        .replace(/^-+|-+$/g, '');
+      return base || ('post-' + Date.now());
+    }
+
+    function collectPosts() {
+      var cards = document.querySelectorAll('.post-card');
+      var posts = [];
+      cards.forEach(function (card) {
+        var get = function (f) { return card.querySelector('[data-field="' + f + '"]').value; };
+        var title = get('title').trim();
+        var date = get('date').trim();
+        var id = get('id').trim() || slugify(title, date);
+        posts.push({
+          id: id,
+          title: title,
+          date: date,
+          category: get('category').trim(),
+          thumbnail: get('thumbnail').trim(),
+          excerpt: get('excerpt').trim(),
+          body: get('body')
+        });
+      });
+      return posts;
+    }
+
+    function addPost() {
+      editingPosts = collectPosts();
+      var today = new Date().toISOString().slice(0, 10);
+      editingPosts.unshift({ id: '', title: '', date: today, category: '', thumbnail: '', excerpt: '', body: '' });
+      renderPostList();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function removePost(i) {
+      editingPosts = collectPosts();
+      if (!confirm('この記事を削除しますか？')) return;
+      editingPosts.splice(i, 1);
+      renderPostList();
+    }
+
+    function savePosts() {
+      var posts = collectPosts();
+      var invalid = posts.some(function (p) { return !p.title || !p.date; });
+      if (invalid) {
+        showToast('タイトルと公開日は必須です');
+        return;
+      }
+      localStorage.setItem('blogPosts', JSON.stringify(posts));
+      BLOG_POSTS = getBlogPosts();
+      editingPosts = posts;
+      renderPostList();
+      showToast('保存しました（ブログページに反映されます）');
+    }
+
+    function resetPosts() {
+      if (!confirm('保存した記事をすべて破棄して、初期状態に戻しますか？')) return;
+      localStorage.removeItem('blogPosts');
+      loadPosts();
+      showToast('初期値に戻しました');
+    }
+
+    function downloadBlogData() {
+      var posts = collectPosts();
+      var lines = [];
+      lines.push('/*');
+      lines.push(' * ブログ記事データ');
+      lines.push(' * blog-admin.html からダウンロードされたファイルです。');
+      lines.push(' * このファイルを js/blog-data.js に上書き保存すると、記事内容が確定します。');
+      lines.push(' */');
+      lines.push('var BLOG_POSTS_DEFAULTS = ' + JSON.stringify(posts, null, 2) + ';');
+      lines.push('');
+      lines.push('function getBlogPosts() {');
+      lines.push('  var posts;');
+      lines.push('  try {');
+      lines.push('    var saved = localStorage.getItem(\'blogPosts\');');
+      lines.push('    posts = saved ? JSON.parse(saved) : BLOG_POSTS_DEFAULTS;');
+      lines.push('  } catch (e) {');
+      lines.push('    posts = BLOG_POSTS_DEFAULTS;');
+      lines.push('  }');
+      lines.push('  return posts.slice().sort(function (a, b) {');
+      lines.push('    return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;');
+      lines.push('  });');
+      lines.push('}');
+      lines.push('');
+      lines.push('var BLOG_POSTS = getBlogPosts();');
+
+      var blob = new Blob([lines.join('\n')], { type: 'application/javascript' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'blog-data.js';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('blog-data.js をダウンロードしました');
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 2500);
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
