@@ -1,11 +1,12 @@
 /*
  * ブログ記事データ
  * -----------------------------------------------------------
- * ここに記事を追記すると、blog.html に自動的に反映されます。
- * 記事の追加・編集は blog-admin.html（ブログ管理画面）から
- * 行うこともできます（保存すると下の一覧がブラウザ内に
- * 上書き保存され、「blog-data.js をダウンロード」でこの
- * ファイル自体を更新できます）。
+ * 記事はSupabaseの homepage_blog_posts テーブルに保存されており、
+ * blog-admin.html から編集・保存すると、どの端末からアクセスしても
+ * blog.html にすぐ反映されます。
+ *
+ * 下の BLOG_POSTS_DEFAULTS は、通信できない場合などに表示する
+ * フォールバック用の初期データです。
  *
  * body は改行2つ（空行）で段落が分かれます。
  * -----------------------------------------------------------
@@ -40,17 +41,23 @@ var BLOG_POSTS_DEFAULTS = [
   }
 ];
 
-function getBlogPosts() {
-  var posts;
-  try {
-    var saved = localStorage.getItem('blogPosts');
-    posts = saved ? JSON.parse(saved) : BLOG_POSTS_DEFAULTS;
-  } catch (e) {
-    posts = BLOG_POSTS_DEFAULTS;
-  }
+function sortBlogPosts(posts) {
   return posts.slice().sort(function (a, b) {
     return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
   });
 }
 
-var BLOG_POSTS = getBlogPosts();
+// Supabaseから記事一覧を取得します。通信に失敗した場合は初期データを返します。
+async function fetchBlogPosts() {
+  try {
+    var result = await supabaseClient.from('homepage_blog_posts').select('*');
+    if (result.error) throw result.error;
+    return sortBlogPosts(result.data || []);
+  } catch (e) {
+    console.error('ブログ記事の取得に失敗しました。初期データを表示します。', e);
+    return sortBlogPosts(BLOG_POSTS_DEFAULTS);
+  }
+}
+
+// ページ読み込み直後は初期データで仮描画し、fetchBlogPosts() 完了後に差し替えます。
+var BLOG_POSTS = sortBlogPosts(BLOG_POSTS_DEFAULTS);

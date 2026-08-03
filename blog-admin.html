@@ -76,6 +76,15 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    .login-wrap { max-width: 360px; margin: 4rem auto; padding: 2rem clamp(1rem, 4vw, 2rem); }
+    .login-wrap h1 { font-family: var(--font-heading); font-size: 1.4rem; color: var(--color-primary-dark); text-align: center; margin-bottom: 1.5rem; }
+    .login-wrap .field-group { margin-bottom: 1rem; }
+    .login-wrap button { width: 100%; margin-top: 0.5rem; }
+    .login-error { color: #a94442; font-size: 0.85rem; text-align: center; margin-top: 0.8rem; min-height: 1.2em; }
+    .logout-bar { text-align: right; font-size: 0.82rem; margin-bottom: 0.5rem; }
+    .logout-bar a { color: var(--color-text-light); cursor: pointer; }
+    .logout-bar a:hover { color: var(--color-primary); }
+
     @media (max-width: 768px) {
       .field-row { grid-template-columns: 1fr; }
     }
@@ -83,10 +92,25 @@
 </head>
 <body style="padding-top: 0;">
 
-  <div class="settings-wrap">
+  <div class="login-wrap" id="loginWrap">
+    <h1>ブログ管理 ログイン</h1>
+    <div class="field-group">
+      <label>メールアドレス</label>
+      <input type="email" id="loginEmail" autocomplete="username">
+    </div>
+    <div class="field-group">
+      <label>パスワード</label>
+      <input type="password" id="loginPassword" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" onclick="login()">ログイン</button>
+    <p class="login-error" id="loginError"></p>
+  </div>
+
+  <div class="settings-wrap" id="adminContent" style="display:none;">
+    <div class="logout-bar"><a onclick="logout()">ログアウト</a></div>
     <div class="settings-header">
       <h1>ブログ管理</h1>
-      <p>ここで記事を追加・編集して保存すると、ブログページに自動的に反映されます。</p>
+      <p>ここで記事を追加・編集して保存すると、どの端末からでもブログページに自動的に反映されます。</p>
     </div>
     <div class="settings-links">
       <a href="blog.html" target="_blank" rel="noopener">→ ブログページを見る</a>
@@ -100,21 +124,56 @@
     <!-- Action Bar -->
     <div class="action-bar">
       <button class="btn btn-primary" onclick="savePosts()">保存する</button>
-      <button class="btn btn-download" onclick="downloadBlogData()">blog-data.js をダウンロード</button>
+      <button class="btn btn-download" onclick="downloadBlogData()">バックアップをダウンロード（JSON）</button>
       <button class="btn btn-reset" onclick="resetPosts()">初期値に戻す</button>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/markdown.js"></script>
   <script src="js/blog-data.js"></script>
   <script>
     var editingPosts = [];
+    var loadedPostIds = [];
 
-    function loadPosts() {
-      editingPosts = getBlogPosts();
+    async function login() {
+      var email = document.getElementById('loginEmail').value.trim();
+      var password = document.getElementById('loginPassword').value;
+      var errorEl = document.getElementById('loginError');
+      errorEl.textContent = '';
+      var result = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+      if (result.error) {
+        errorEl.textContent = 'ログインに失敗しました: ' + result.error.message;
+        return;
+      }
+      showAdmin();
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      location.reload();
+    }
+
+    async function showAdmin() {
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('adminContent').style.display = '';
+      await loadPosts();
+    }
+
+    async function checkSession() {
+      var result = await supabaseClient.auth.getSession();
+      if (result.data && result.data.session) {
+        await showAdmin();
+      }
+    }
+
+    async function loadPosts() {
+      editingPosts = await fetchBlogPosts();
+      loadedPostIds = editingPosts.map(function (p) { return p.id; });
       renderPostList();
     }
 
@@ -278,59 +337,52 @@
       renderPostList();
     }
 
-    function savePosts() {
+    async function savePosts() {
       var posts = collectPosts();
       var invalid = posts.some(function (p) { return !p.title || !p.date; });
       if (invalid) {
         showToast('タイトルと公開日は必須です');
         return;
       }
-      localStorage.setItem('blogPosts', JSON.stringify(posts));
-      BLOG_POSTS = getBlogPosts();
+
+      var currentIds = posts.map(function (p) { return p.id; });
+      var idsToDelete = loadedPostIds.filter(function (id) { return currentIds.indexOf(id) === -1; });
+
+      if (idsToDelete.length) {
+        var delResult = await supabaseClient.from('homepage_blog_posts').delete().in('id', idsToDelete);
+        if (delResult.error) { showToast('保存に失敗しました: ' + delResult.error.message); return; }
+      }
+
+      var upsertResult = await supabaseClient.from('homepage_blog_posts').upsert(posts, { onConflict: 'id' });
+      if (upsertResult.error) { showToast('保存に失敗しました: ' + upsertResult.error.message); return; }
+
+      loadedPostIds = currentIds;
       editingPosts = posts;
       renderPostList();
-      showToast('保存しました（ブログページに反映されます）');
+      showToast('保存しました（どの端末からでもブログページに反映されます）');
     }
 
-    function resetPosts() {
-      if (!confirm('保存した記事をすべて破棄して、初期状態に戻しますか？')) return;
-      localStorage.removeItem('blogPosts');
-      loadPosts();
+    async function resetPosts() {
+      if (!confirm('保存されている記事をすべて削除して、初期状態（サンプル3記事）に戻しますか？\nこの操作は元に戻せません。')) return;
+      if (loadedPostIds.length) {
+        var delResult = await supabaseClient.from('homepage_blog_posts').delete().in('id', loadedPostIds);
+        if (delResult.error) { showToast('リセットに失敗しました: ' + delResult.error.message); return; }
+      }
+      var insResult = await supabaseClient.from('homepage_blog_posts').insert(BLOG_POSTS_DEFAULTS);
+      if (insResult.error) { showToast('リセットに失敗しました: ' + insResult.error.message); return; }
+      await loadPosts();
       showToast('初期値に戻しました');
     }
 
     function downloadBlogData() {
       var posts = collectPosts();
-      var lines = [];
-      lines.push('/*');
-      lines.push(' * ブログ記事データ');
-      lines.push(' * blog-admin.html からダウンロードされたファイルです。');
-      lines.push(' * このファイルを js/blog-data.js に上書き保存すると、記事内容が確定します。');
-      lines.push(' */');
-      lines.push('var BLOG_POSTS_DEFAULTS = ' + JSON.stringify(posts, null, 2) + ';');
-      lines.push('');
-      lines.push('function getBlogPosts() {');
-      lines.push('  var posts;');
-      lines.push('  try {');
-      lines.push('    var saved = localStorage.getItem(\'blogPosts\');');
-      lines.push('    posts = saved ? JSON.parse(saved) : BLOG_POSTS_DEFAULTS;');
-      lines.push('  } catch (e) {');
-      lines.push('    posts = BLOG_POSTS_DEFAULTS;');
-      lines.push('  }');
-      lines.push('  return posts.slice().sort(function (a, b) {');
-      lines.push('    return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;');
-      lines.push('  });');
-      lines.push('}');
-      lines.push('');
-      lines.push('var BLOG_POSTS = getBlogPosts();');
-
-      var blob = new Blob([lines.join('\n')], { type: 'application/javascript' });
+      var blob = new Blob([JSON.stringify(posts, null, 2)], { type: 'application/json' });
       var a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'blog-data.js';
+      a.download = 'blog-posts-backup.json';
       a.click();
       URL.revokeObjectURL(a.href);
-      showToast('blog-data.js をダウンロードしました');
+      showToast('バックアップ用JSONをダウンロードしました');
     }
 
     function showToast(msg) {
@@ -340,7 +392,7 @@
       setTimeout(function () { t.classList.remove('show'); }, 2500);
     }
 
-    loadPosts();
+    checkSession();
   </script>
 </body>
 </html>
