@@ -1,0 +1,37 @@
+/**
+ * @file style_trust.css
+ * @description 信頼性と実績を表現するテーマスタイルシート。
+ *              基本スタイルシートをインポートし、ネイビーとゴールドの配色で上書きします。
+ */
+
+@import url("style.css");
+
+:root {
+  --color-primary: #1b365d;       /* 信頼感のあるディープネイビー */
+  --color-primary-dark: #0f2240;  /* より深いネイビー */
+  --color-primary-light: #2c5282; /* 明るめのネイビー */
+  --color-primary-pale: #ebf8ff;  /* 淡いブルーの背景色 */
+  --color-bg-section: #f0f4f8;    /* セクション用淡い背景色 */
+  --color-accent: #c9a96e;        /* 上品なゴールドのアクセントカラー */
+}
+
+/* ヒーローエリアの背景グラデーションをテーマ色に合わせて調整 */
+.hero {
+  background: linear-gradient(135deg, #e2e8f5 0%, #c8d4e8 50%, #b6c4dd 100%);
+}
+
+/* ヒーローエリアのオーバーレイ（文字の視認性向上のための半透明の背景） */
+.hero-overlay {
+  background: rgba(10, 25, 50, 0.6);
+}
+
+/* ロゴのインラインカラーをCSS変数に上書き */
+.logo-icon circle {
+  stroke: var(--color-primary) !important;
+}
+.logo-icon path:nth-of-type(1) {
+  fill: var(--color-primary) !important;
+}
+.logo-icon path:nth-of-type(2) {
+  fill: var(--color-primary-light) !important;
+}

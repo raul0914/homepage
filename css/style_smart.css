@@ -1,0 +1,37 @@
+/**
+ * @file style_smart.css
+ * @description スマート・労務DXを表現するテーマスタイルシート。
+ *              基本スタイルシートをインポートし、ロイヤルブルーとイエローの配色で上書きします。
+ */
+
+@import url("style.css");
+
+:root {
+  --color-primary: #0056b3;       /* 先進的なロイヤルブルー */
+  --color-primary-dark: #003d80;  /* 深いインディゴブルー */
+  --color-primary-light: #3385ff; /* 鮮やかなライトブルー */
+  --color-primary-pale: #f0f6ff;  /* 清潔感のある淡いブルー背景色 */
+  --color-bg-section: #f4f7fa;    /* セクション用寒色系淡い背景色 */
+  --color-accent: #ffb700;        /* 活力を与えるイエローのアクセントカラー */
+}
+
+/* ヒーローエリアの背景グラデーションをテーマ色に合わせて調整 */
+.hero {
+  background: linear-gradient(135deg, #e6f0fa 0%, #c8dcfa 50%, #abc8f7 100%);
+}
+
+/* ヒーローエリアのオーバーレイ（スマートなダークブルー透過） */
+.hero-overlay {
+  background: rgba(10, 30, 60, 0.6);
+}
+
+/* ロゴのインラインカラーをCSS変数に上書き */
+.logo-icon circle {
+  stroke: var(--color-primary) !important;
+}
+.logo-icon path:nth-of-type(1) {
+  fill: var(--color-primary) !important;
+}
+.logo-icon path:nth-of-type(2) {
+  fill: var(--color-accent) !important;
+}

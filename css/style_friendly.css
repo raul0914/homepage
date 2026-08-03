@@ -1,0 +1,37 @@
+/**
+ * @file style_friendly.css
+ * @description 親しみやすさと安心感を表現するテーマスタイルシート。
+ *              基本スタイルシートをインポートし、イエロー・ベージュ・アースグリーンの配色で上書きします。
+ */
+
+@import url("style.css");
+
+:root {
+  --color-primary: #dca11d;       /* 親しみのあるマスタードイエロー */
+  --color-primary-dark: #b88010;  /* 濃いイエローブラウン */
+  --color-primary-light: #ebbc58; /* 明るめのイエロー */
+  --color-primary-pale: #fdfaf2;  /* 温かみのあるクリーム背景色 */
+  --color-bg-section: #f6f3eb;    /* セクション用暖色系淡い背景色 */
+  --color-accent: #4f7744;        /* 優しいアースグリーンのアクセントカラー */
+}
+
+/* ヒーローエリアの背景グラデーションをテーマ色に合わせて調整 */
+.hero {
+  background: linear-gradient(135deg, #fdfbf7 0%, #f7ebd0 50%, #edd8a6 100%);
+}
+
+/* ヒーローエリアのオーバーレイ（暖かみのあるブラウン系透過） */
+.hero-overlay {
+  background: rgba(90, 60, 20, 0.45);
+}
+
+/* ロゴのインラインカラーをCSS変数に上書き */
+.logo-icon circle {
+  stroke: var(--color-primary) !important;
+}
+.logo-icon path:nth-of-type(1) {
+  fill: var(--color-primary) !important;
+}
+.logo-icon path:nth-of-type(2) {
+  fill: var(--color-accent) !important;
+}
